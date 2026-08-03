@@ -1,0 +1,47 @@
+name: Feature Request
+about: Asteraの公開機能、Documentation、Sampleへの改善案を提案する
+title: "[Idea] "
+labels:
+  - enhancement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        何を追加するかだけでなく、誰のどんな問題を解決するかを教えてください。
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: 解決したい問題
+      description: 現在どのような場面で困るかを書いてください。
+    validations:
+      required: true
+
+  - type: textarea
+    id: idea
+    attributes:
+      label: 提案する内容
+      description: どのようになると使いやすいかを書いてください。
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: 関係する領域
+      options:
+        - Asteraの説明
+        - Astera App
+        - 8つの判断材料
+        - 活用例・Sample
+        - Developer連携
+        - Accessibility
+        - その他
+    validations:
+      required: true
+
+  - type: textarea
+    id: example
+    attributes:
+      label: 利用例
+      description: 実際にどのように使うか、短い例があれば書いてください。
