@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Astera公式サイト
+    url: https://asterav8.jp
+    about: アカウント、料金、契約、提携、取材などの問い合わせ
+  - name: Astera Documentation
+    url: https://github.com/seigo-gace/Astera/tree/main/docs
+    about: Asteraの仕組み、使い方、FAQを確認する
