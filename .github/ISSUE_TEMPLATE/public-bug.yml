@@ -1,0 +1,63 @@
+name: Public Bug
+about: 公開されているAsteraの画面や動作の問題を知らせる
+title: "[Bug] "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        状況を確認しやすくするため、分かる範囲で入力してください。
+
+  - type: input
+    id: page
+    attributes:
+      label: 発生した場所
+      description: 画面名やURLを書いてください。
+    validations:
+      required: true
+
+  - type: textarea
+    id: action
+    attributes:
+      label: 行った操作
+      description: 問題が起きるまでの手順を順番に書いてください。
+      placeholder: |
+        1. Astera Appを開いた
+        2. 内容を入力した
+        3. 実行を押した
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: 期待していた結果
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: 実際に起きたこと
+    validations:
+      required: true
+
+  - type: input
+    id: environment
+    attributes:
+      label: 使用環境
+      description: 端末、OS、Browserを書いてください。
+      placeholder: Pixel / Android / Chrome
+
+  - type: input
+    id: occurred_at
+    attributes:
+      label: 発生日時
+      placeholder: 2026-08-03 21:30 JST
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: 補足
+      description: Error Messageや再現頻度などがあれば書いてください。
