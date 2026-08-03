@@ -1,0 +1,21 @@
+name: Documentation Check
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  local-links:
+    name: Local Markdown links
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Check documentation links
+        run: python3 scripts/check_docs.py
