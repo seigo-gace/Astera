@@ -1,0 +1,44 @@
+name: Documentation
+about: 説明の誤り、分かりにくい部分、Link切れを知らせる
+title: "[Docs] "
+labels:
+  - documentation
+body:
+  - type: markdown
+    attributes:
+      value: |
+        AsteraのDocumentation改善にご協力いただき、ありがとうございます。
+
+  - type: input
+    id: location
+    attributes:
+      label: 対象ページ
+      description: README、File名、見出し、URLなどを書いてください。
+      placeholder: docs/how-it-works.md の「複数の立場から考える」
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: 現在の問題
+      description: どこが誤っているか、または分かりにくいかを書いてください。
+    validations:
+      required: true
+
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: 改善案
+      description: より分かりやすい表現や追加したい説明があれば書いてください。
+
+  - type: dropdown
+    id: audience
+    attributes:
+      label: 誰にとって分かりにくいですか
+      options:
+        - 初めてAsteraを知る人
+        - Asteraの利用者
+        - 開発者
+        - 紹介・掲載を行う人
+        - その他
