@@ -1,6 +1,81 @@
 # よくある質問
 
-Asteraそのもの、Astera App、Account、結果、Mobile利用、主役AIとの連携について、よくある質問をまとめています。
+このFAQは、Asteraそのものと、現在Public Repositoryで公開できる範囲を説明します。
+
+Appの画面やRouteがSourceへ存在することと、Productionで利用できることを分けて回答します。
+
+最新の判定は[現在の公開状態](current-status.md)を確認してください。
+
+---
+
+## 現在の公開状態
+
+### 今、Asteraは何を公開していますか？
+
+現在公開している主な内容は次です。
+
+- Asteraの目的と役割
+- 8つの判断材料
+- Astera v8の処理構造
+- Use Case
+- 入力・Output Sample
+- Astera AppのFrontend Source実装範囲
+- 43 Route Pattern
+- Documentation、Support、Security、Contribution情報
+
+---
+
+### Astera Appは今すぐ本番利用できますか？
+
+現在のPublic Repositoryでは、本番利用可能とは案内していません。
+
+Frontend Sourceに画面、Route、入力、Result Mapping、Turn、Copy、Markdown Download、Responsive Shell等は実装されています。
+
+Backend、認証、決済、Storage、Production環境、実端末を含む確認は別の段階です。
+
+---
+
+### 画面がSourceにあるなら、機能は完成しているのではありませんか？
+
+画面・RouteのSource実装と、実際に機能が成立することは別です。
+
+たとえばLogin画面があっても、Account Database、Session、Email、Provider接続等が確認されるまでは、本番Login可能とは表記しません。
+
+同じ基準をProject、History、Share、Credit、決済、Developer APIにも適用します。
+
+---
+
+### 現在公開できるAppの実装は何ですか？
+
+Source上で確認できる主な範囲は次です。
+
+- 新しい実行画面
+- 10種類の目的選択
+- Templateと追加Optionの選択UI
+- File選択UIとMetadata
+- 処理段階表示
+- 8 Section Result Mapping
+- Turn Rail
+- Section／全体Copy
+- Markdown Download
+- 端末共有
+- 43 Route Pattern
+- Desktop、Smartphone、Tablet向けResponsive Shell
+- Android／iOS Native Shell用設定とWorkflow
+- API未接続時に成功表示へ置き換えないFail-Closed方針
+
+---
+
+### 今後の機能まで完成したように書いていませんか？
+
+現在は、Public Documentation全体で次を区別しています。
+
+- 公開済み
+- Source実装済み
+- 接続確認前
+- 実機確認前
+
+未確認の機能を利用可能とは表記しません。
 
 ---
 
@@ -10,15 +85,13 @@ Asteraそのもの、Astera App、Account、結果、Mobile利用、主役AIと�
 
 Astera v8は生成AIそのものではありません。
 
-固定された処理順とRuleを使い、質問、相談、資料、計画、AI回答を、8つの判断材料へ整理するRuntimeです。
-
-Astera Appから主役AIへつなげて使うことはできますが、Asteraと主役AIは別の役割を持ちます。
+固定された処理順とRuleを使い、質問、相談、計画、AI回答等を8つの判断材料へ整理するRuntimeです。
 
 ---
 
 ### ChatGPT、Claude、Geminiとの違いは何ですか？
 
-ChatGPT、Claude、Geminiなどは、文章、説明、要約、提案、Codeを作ることが得意です。
+ChatGPT、Claude、Gemini等は、文章、説明、要約、提案、Codeを作ることが得意です。
 
 Asteraは、その前に必要な目的、前提、事実、危険、反対視点、比較案を整理します。
 
@@ -29,131 +102,23 @@ Astera ＝ 判断の骨組みを作る
 
 ---
 
-### Asteraだけでも使えますか？
+### Asteraだけでも使う考え方ですか？
 
-使えます。
+はい。
 
-8つの判断材料を自分で読み、選択肢の比較や最終判断に使えます。
+8つの判断材料を自分で読み、選択肢の比較や最終判断へ使う設計です。
 
-文章、計画、手順、Codeなどへ仕上げたい場合は、主役AIへ渡します。
-
----
-
-### Asteraが最終決定をしてくれますか？
-
-Asteraは推奨判断を示しますが、最終決定を強制しません。
-
-推奨理由、前提不足、Risk、別案、成立条件、停止条件を一緒に示し、利用者が理由を理解して決められる状態を作ります。
+文章、計画、手順、Code等へ仕上げる場合は、主役AIへ渡します。
 
 ---
 
-### 同じ入力なら同じ結果になりますか？
+### Asteraが最終決定を強制しますか？
 
-Astera v8は、固定された処理順とRuleによる再現性を重視しています。
+強制しません。
 
-ただし、追加情報、選択目的、設定、更新されたRuleが変わればResultも変わります。主役AIが作る最終文章は、利用するAIによっても変わります。
-
----
-
-### 最新情報を自動で調べますか？
-
-最新確認が必要な箇所や、根拠が不足している箇所を見つけ、確認事項として整理できます。
-
-実際の最新価格、法律、製品仕様、Newsなどは、公式Sourceや検索機能で確認する必要があります。
+推奨判断だけでなく、前提不足、Risk、反対視点、別案、成立条件、停止条件を一緒に示す考え方です。
 
 ---
-
-## 入力について
-
-### どんな内容を入力できますか？
-
-- 質問
-- 相談
-- 複数案の比較
-- 計画
-- 資料
-- AI回答
-- 障害状況
-- 契約確認
-- 改善したい文章や設計
-- 調査前の論点
-
-などを入力できます。
-
----
-
-### 専門知識がなくても使えますか？
-
-使えます。
-
-普段の言葉で入力し、Resultは8つの決まった項目で確認します。
-
-専門用語が分からない場合は、その言葉を「確認すべき前提」として入力できます。
-
----
-
-### 入力は長い方がよいですか？
-
-長さより、判断に必要な情報が入っていることが重要です。
-
-特に次が役立ちます。
-
-- 目的
-- 背景
-- 期限
-- 予算
-- 人数
-- 候補
-- 確認済みの事実
-- 避けたい失敗
-
----
-
-### 目的を選ばなくても使えますか？
-
-使えます。
-
-迷う場合は自動を選ぶか、入力へ「何を知りたいか」を詳しく書きます。
-
-目的を選ぶと、レビュー、比較、検証、原因分析など、見るべき方向を明確にできます。
-
----
-
-### 複数の目的を選べますか？
-
-選べます。
-
-たとえば「比較しながらRiskを確認する」「計画をReviewする」といった使い方ができます。
-
-優先する目的がある場合は、入力へ書きます。
-
----
-
-### Fileを追加できますか？
-
-Astera Appでは、実行に関係するFileを追加する画面があります。
-
-Fileだけで目的が自動的に確定するわけではないため、「このFileの何を確認したいか」も入力します。
-
----
-
-### File容量が大きい場合はどうなりますか？
-
-利用できる容量やFile形式は、公開環境、Plan、Storage設定によって異なります。
-
-大きなFileでは、必要な部分を分ける、Textへ変換する、確認範囲を指定する方法も検討します。
-
----
-
-### Templateは何ですか？
-
-レビュー、比較、計画、Risk確認など、繰り返し使う確認観点を入力へ追加する機能です。
-
-Templateは結論を固定するものではなく、確認漏れを減らすために使います。
-
----
-
-## Resultについて
 
 ### 8つの判断材料は何ですか？
 
@@ -170,81 +135,133 @@ Templateは結論を固定するものではなく、確認漏れを減らすた
 
 ---
 
-### どこから読めばよいですか？
+### 最新情報を自動で調べますか？
 
-初めての場合は、次の3項目から読みます。
+Asteraは、最新確認が必要な箇所や根拠不足を判断材料として整理する考え方です。
 
-- 前提不足
-- 危機察知
-- 推奨判断
-
-その後、事実確認と比較案を読み、推奨が成立する理由を確認します。
+実際の価格、法律、製品仕様、News等は、公式Sourceや検索機能で確認する必要があります。
 
 ---
 
-### Resultが一般的すぎます
+## Input・目的選択
 
-目的、期限、予算、人数、候補、避けたい失敗、確認済み事実を追加して再実行します。
+### どんな内容を入力する想定ですか？
 
-「詳しくしてください」だけでなく、何を具体化したいかを書きます。
+- 質問
+- 相談
+- 複数案の比較
+- 計画
+- AI回答
+- 障害状況
+- 契約確認
+- 改善したい文章や設計
+- 調査前の論点
 
----
-
-### 自分の考えと違うResultが出ました
-
-反対視点、事実確認、比較条件を見て、どこで評価が分かれたかを確認します。
-
-入力に誤りや不足がある場合は修正して再実行します。
-
----
-
-### 推奨判断だけを使ってよいですか？
-
-重要な判断では、推奨判断だけを切り離さないでください。
-
-前提不足、危機察知、成立条件、停止条件を一緒に読みます。
+等を想定しています。
 
 ---
 
-### Resultをコピーできますか？
+### どのような情報を入れるとよいですか？
 
-項目単位とResult全体のコピーを使えます。
+特に次が役立ちます。
 
-主役AIへ渡す場合は、再指示だけでなく、関連する前提・Risk・比較案も一緒に渡すと分かりやすくなります。
-
----
-
-### Resultを保存できますか？
-
-Project、History、Markdown Download、Shareなどを使って保存・再利用します。
-
-詳しくは[Workspace・結果管理](workspace-and-results.md)をご覧ください。
-
----
-
-### 過去のResultをそのまま使えますか？
-
-当時と条件が同じ場合は参考にできます。
-
-価格、期限、法律、人数、仕様、利用者の希望が変わっている場合は再実行します。
+- 目的
+- 背景
+- 期限
+- 予算
+- 人数
+- 制約
+- 候補
+- 確認済みの事実
+- 未確認の推測
+- 避けたい失敗
 
 ---
 
-## Project・History・Shareについて
+### 目的選択はいくつありますか？
 
-### Projectは何のためにありますか？
+現在のFrontend Sourceには次の10種類があります。
 
-同じ目的に関係する実行、File、Result、判断変更をまとめるために使います。
+- 自動
+- Review
+- 比較
+- 検証
+- 改善
+- 調査
+- 計画
+- 検討
+- 判断
+- 原因
 
-単発で終わらない検討では、Projectを作ると経緯を追いやすくなります。
+目的選択UIはSource実装済みです。
+
+目的ごとのBackend Resultは接続確認前です。
 
 ---
 
-### HistoryとProjectの違いは何ですか？
+### Templateは何ですか？
 
-Historyは過去の実行を時系列や検索で探す場所です。
+現在のSourceには、Review、比較、計画、Risk確認のTemplateがあります。
 
-Projectは、同じ目的に関係する実行をまとめる場所です。
+繰り返し使う確認観点を入力条件へ加えるためのUIです。
+
+---
+
+### 翻訳や文書生成Optionは使えますか？
+
+高精度翻訳、文書生成、高度な書き換えの選択UIはSourceにあります。
+
+各Optionの外部処理、品質、課金を含む実動作は、現在の公開実績には含めません。
+
+---
+
+## File
+
+### Fileを追加できますか？
+
+File選択UIとMetadataをPayloadへ含めるSourceがあります。
+
+現在扱う構造は、File名、Size、Type等です。
+
+---
+
+### Fileの中身を解析できますか？
+
+現在の公開実績には含めません。
+
+File本体のUpload、Storage保存、内容抽出、解析、Result反映は接続確認前です。
+
+---
+
+### 4GBのFileを解析できますか？
+
+Frontend SourceにFile Sizeを扱う設定があっても、4GBの実Upload・保存・解析が成立するとは表記しません。
+
+File容量の実上限は、Backend、Storage、Network、Plan、解析処理の確認後に確定します。
+
+---
+
+## Result・Turn
+
+### Resultはどのように表示しますか？
+
+Responseを8つの判断材料へMappingするFrontend構成があります。
+
+Backendから正しいResponseを受け取るProduction動作は確認前です。
+
+---
+
+### ResultをCopyできますか？
+
+Section単位とResult全体のCopy処理はFrontend Sourceにあります。
+
+---
+
+### Markdownとして保存できますか？
+
+Markdown生成・Download処理はFrontend Sourceにあります。
+
+実Browser・実端末ごとの確認は端末検証の対象です。
 
 ---
 
@@ -252,198 +269,174 @@ Projectは、同じ目的に関係する実行をまとめる場所です。
 
 一つの作業内で行った各実行です。
 
-不足情報を追加したり、比較条件を変えたりした経緯をTurnごとに追えます。
+Turn Rail、Turn間移動、名称変更、削除のFrontend Sourceがあります。
+
+Server保存と別Sessionからの再取得は確認前です。
 
 ---
 
-### Resultを外部へ共有できますか？
+## Project・History・Share
 
-Public ShareまたはPrivate Shareを使う構成です。
+### Project画面はありますか？
 
-共有前に、個人情報、契約情報、社内情報、API Key、File名が含まれていないか確認します。
+Routeと画面経路はSourceにあります。
 
----
-
-### 共有を止められますか？
-
-Share管理から対象の共有状態を確認し、停止・期限変更などを管理します。
+Project作成、保存、更新、削除、再取得等のBackend動作は確認前です。
 
 ---
 
-## Account・Securityについて
+### History画面はありますか？
 
-### GoogleやGitHubでLoginできますか？
+Routeと画面経路はSourceにあります。
 
-外部Providerを本人確認の入口として利用する構成です。
-
-ProviderのPasswordをAsteraが取得・流用することはありません。
+実Dataの保存、検索、Paging、別端末同期等は確認前です。
 
 ---
 
-### Google／GitHub Login後にAstera用Passwordが必要なのはなぜですか？
+### Public ShareやPrivate Shareは使えますか？
 
-外部Providerへ依存せず、Astera Account側でもSecurityと復旧方法を管理するためです。
+Public Share、Private Share、Share管理のRouteはSourceにあります。
 
----
-
-### Passkeyを使えますか？
-
-Account SecurityでPasskeyを管理する構成です。
-
-対応端末では、生体認証や端末Lockを使ってLoginできます。
+Token発行、認可、期限、停止、Data非公開化等のBackend動作は確認前です。
 
 ---
 
-### 二段階認証はありますか？
+## Account・Security
 
-Account Securityで二段階認証を管理する構成です。
+### LoginやAccount登録はできますか？
 
-設定時はBackup Codeも安全な場所へ保存します。
+Login、登録、Email確認、Password再設定等のRouteと画面経路はSourceにあります。
 
----
-
-### Backup Codeを失いました
-
-Loginできる状態で再生成します。
-
-Loginできない場合はSupportへ連絡します。Password、認証Code、秘密情報を公開Issueへ書かないでください。
+認証Backend、Email、Session、Provider接続を含む本番動作は確認前です。
 
 ---
 
-### Login状態はどのくらい続きますか？
+### GoogleやGitHub Loginは利用できますか？
 
-Session Policyに基づいて継続し、Security上の再確認が必要な場合はPassword、Passkey、二段階認証などを求めます。
+外部Providerを本人確認の入口として使う設計とFrontend境界があります。
 
-共有端末では利用後にLogoutします。
+Provider OAuth実接続は現在の公開実績に含めません。
+
+ProviderのPasswordをAsteraが取得・流用しない方針です。
 
 ---
 
-## Plan・Credit・決済について
+### Passkeyは利用できますか？
 
-### 料金はどこで確認できますか？
+Security画面の設計にPasskeyがあります。
 
-Astera Appの料金・Plan画面で確認します。
+WebAuthn、端末Authenticator、登録、Login、削除等の実動作は確認前です。
 
-[Astera Appを開く](https://app.asterav8.jp)
+---
+
+### 二段階認証は利用できますか？
+
+二段階認証Challenge Routeと管理設計があります。
+
+TOTP、Backup Code、Recovery等の実動作は確認前です。
+
+---
+
+## Plan・Credit・決済
+
+### 料金・Plan画面はありますか？
+
+`/pricing`とPlan・Subscription画面のRouteはSourceにあります。
+
+正式Catalog、契約Data、変更・解約等の実動作は確認前です。
 
 ---
 
 ### Creditとは何ですか？
 
-実行、Option、Developer APIなどの利用量を管理する単位です。
+Asteraの実行、Option、Developer API等の利用量を管理する設計上の単位です。
 
-Credit画面で残高、購入、使用履歴、低残高通知を確認します。
-
----
-
-### Creditがなくなるとどうなりますか？
-
-新しい実行を開始せず、停止理由と復帰方法を表示します。
-
-購入後はBilling Statusで反映状態を確認します。
+Credit画面のRoute・画面構成はありますが、Ledger、残高、購入、使用履歴等のBackend動作は確認前です。
 
 ---
 
-### 決済したのに反映されません
+### 決済できますか？
 
-Billing Statusで、完了、反映待ち、失敗、Cancel、確認が必要な状態を確認します。
+CheckoutとBilling StatusのRoute・画面構成があります。
 
-時間を置いても反映されない場合は、公開Issueへ決済情報を書かずSupportへ連絡します。
+外部決済、Webhook、署名検証、Plan・Credit反映、返金等は確認前です。
 
----
-
-## Mobile・Tabletについて
-
-### Astera Appはスマートフォンでも使えますか？
-
-Web Browser、Android、iPhoneで共通利用できるApplicationとして設計されています。
-
-公開環境やStoreでの提供状況は公式案内を確認してください。
+現在、決済可能とは案内しません。
 
 ---
 
-### Tabletでも使えますか？
+## Developer API
 
-Tabletの縦向き、横向き、画面分割、Window Size変更へ追従する設計です。
+### Developer Modeはありますか？
 
----
-
-### 画面を横向きにしたらどうなりますか？
-
-入力中の内容やResultを維持しながら、利用できる幅と高さに合わせて配置を変えます。
+Developer ModeのRouteと画面構成はSourceにあります。
 
 ---
 
-### 横Scrollや画面の左右ぶれは起きませんか？
+### APIを今利用できますか？
 
-通常操作では不要な横Scrollを発生させず、長いTextやURLは画面内で扱えるようにする設計です。
+現在のPublic Repositoryでは提供中とは案内していません。
 
-不具合を見つけた場合は、端末、Browser、画面向き、発生画面を添えて報告してください。
-
----
-
-### Light／Darkを選べますか？
-
-Light、Dark、端末設定への連動を選ぶ構成です。
+Endpoint、Schema、Key発行、Authentication、Rate Limit、使用量計測、課金等の確認後に正式Documentを公開します。
 
 ---
 
-### 日本語以外でも使えますか？
+## Mobile・Tablet・Native App
 
-表示言語を管理する画面があります。
+### Smartphone向けSourceはありますか？
 
-利用可能な言語や翻訳Optionは、公開環境と設定により異なります。
+Header、Drawer、Safe Area、Touch Target、Keyboard対策等のResponsive Sourceがあります。
 
----
-
-## Developer Modeについて
-
-### Developer Modeとは何ですか？
-
-Asteraを外部Applicationや業務Systemから利用するためのAPI管理画面です。
-
-API Key、使用量、Credit、停止状態、接続先などを管理します。
+実Smartphone Browserでの確認は現在の公開実績に含めません。
 
 ---
 
-### 公開API仕様はどこにありますか？
+### Tablet向けSourceはありますか？
 
-正式に公開されたAPI Documentを基準にします。
+Tablet幅、Orientation、Window Resize、Pointer等を扱うSourceがあります。
 
-Public RepositoryにAPI仕様が追加された場合は、そのVersionと更新日を確認してください。
-
----
-
-## 医療・法律・金融など
-
-### 医療、法律、税務、投資にも使えますか？
-
-確認事項、事実と推測、Risk、専門家へ聞く質問を整理する補助として利用できます。
-
-資格を持つ専門家の診断、法的助言、税務判断、投資判断を置き換えるものではありません。
-
-緊急性がある場合はAsteraのResultを待たず、適切な専門機関へ連絡してください。
+実Tablet、Split View、Foldable等の確認は未完了です。
 
 ---
 
-## Support
+### Android Appは公開されていますか？
 
-### 不具合や改善案はどこへ送ればよいですか？
+公開済みとは案内していません。
 
-公開情報や公開環境に関する内容は、GitHub Issuesまたは公式Support窓口から送れます。
-
-詳しくは[Support](../SUPPORT.md)をご覧ください。
+Capacitor設定とWorkflowはありますが、APK／AAB実Build、実機、Google Play公開は確認前です。
 
 ---
 
-### Error報告に何を書けばよいですか？
+### iPhone・iPad Appは公開されていますか？
 
-- 発生日時
-- 利用端末
-- OSとBrowser
-- 画面名
-- 操作手順
-- 表示されたError
-- 再現するか
+公開済みとは案内していません。
 
-Password、Backup Code、API Key、決済情報、個人情報は書かないでください。
+Capacitor設定とWorkflowはありますが、Simulator、実機、TestFlight、App Store公開は確認前です。
+
+---
+
+## Public Repository
+
+### このRepositoryからAppをInstallできますか？
+
+現在のPublic Repositoryは、AppのInstall Packageや全Sourceを配布するReleaseではありません。
+
+Asteraの目的、処理構造、App Source実装範囲、Sample、Documentationを公開するRepositoryです。
+
+---
+
+### Public Repositoryとして今公開してよい状態ですか？
+
+現在完成している範囲を公開するRepositoryとしてはGOです。
+
+ただし、Production App、Account、決済、Storage、Developer API、Native App等を利用可能機能として紹介することはNO-GOです。
+
+公開範囲の正本は[現在の公開状態](current-status.md)です。
+
+---
+
+### 不具合やSecurity問題はどこへ報告しますか？
+
+一般的な質問・不具合は[Support](../SUPPORT.md)、Security問題は[Security Policy](../SECURITY.md)を確認してください。
+
+Password、Backup Code、API Key、決済情報、個人情報をPublic Issueへ書かないでください。
