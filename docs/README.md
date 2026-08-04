@@ -1,32 +1,42 @@
 # Astera Documentation
 
-AsteraのDocumentationは、初めて知る人、Astera Appを使う人、判断の仕組みを理解したい人、外部連携を検討する人が、目的に合う順番で読めるように分かれています。
+AsteraのDocumentationは、初めて知る人、現在の公開範囲を確認する人、Astera AppのSource実装を理解したい人、判断の仕組みを確認したい人が、目的に合う順番で読めるように分かれています。
+
+最初に[現在の公開状態](current-status.md)を確認してください。
+
+このDocumentationでは、次を区別しています。
+
+- **公開済み**：現在このRepositoryで外部へ示せる内容
+- **Source実装済み**：画面・Route・Frontend処理がSourceに存在する状態
+- **実稼働未確認**：Backend、認証、決済、Storage、Production、実機を含む確認前の状態
+
+画面やRouteが存在するだけの機能を、現在利用可能とは表記しません。
 
 ---
 
 ## 初めてAsteraを知った人
 
-次の順番で読むと、Astera全体をつかめます。
+次の順番で読むと、Astera全体と現在地をつかめます。
 
 1. [Repository README](../README.md)
-2. [Asteraのはじめかた](getting-started.md)
+2. [現在の公開状態](current-status.md)
 3. [Astera AppとAstera v8](app-and-runtime.md)
 4. [Asteraの仕組み](how-it-works.md)
-5. [公開サンプル](../examples/README.md)
+5. [公開Sample](../examples/README.md)
 
 ---
 
-## Astera Appを使う人
+## 現在のApp Source実装を確認する人
 
 | Document | 分かること |
 |---|---|
-| [Astera App完全ガイド](app-guide.md) | 入力、目的、File、Result、Project、History、Settings、AccountなどApp全体 |
-| [App画面一覧](app-screen-map.md) | 各画面の役割と、どこで何を行うか |
-| [はじめかた](getting-started.md) | 初回実行からResultの保存・再利用まで |
-| [Workspace・結果管理](workspace-and-results.md) | Project、History、Turn、Result、Share |
-| [Account・Security・Plan・Credit](account-security-and-billing.md) | Login、Passkey、2FA、契約、Credit、決済 |
-| [Mobile・Tablet・Accessibility](mobile-and-accessibility.md) | Smartphone、Tablet、画面向き、Touch、Keyboard |
-| [FAQ](faq.md) | よくある疑問と困ったときの確認先 |
+| [Astera App Guide](app-guide.md) | 入力、目的、Result、Turn、Project、Settings、Account等のSource実装と接続状態 |
+| [App画面一覧](app-screen-map.md) | 43 Route Pattern、各画面の役割、Source実装と実稼働の区別 |
+| [操作Flow](getting-started.md) | 現在のSourceに沿った入力からResult再利用までの流れ |
+| [Workspace・結果管理](workspace-and-results.md) | Project、History、Turn、Result、Shareの設計と現在地 |
+| [Account・Security・Plan・Credit](account-security-and-billing.md) | Account関連Route・画面構成と外部接続の確認状態 |
+| [Mobile・Tablet・Accessibility](mobile-and-accessibility.md) | Responsive Source対応と実端末確認状態 |
+| [FAQ](faq.md) | 現在利用可能な範囲と、設計・実装中の範囲 |
 
 ---
 
@@ -37,7 +47,7 @@ AsteraのDocumentationは、初めて知る人、Astera Appを使う人、判断
 | [Asteraの仕組み](how-it-works.md) | 入力から8つの判断材料へ整理される工程 |
 | [Astera AppとAstera v8](app-and-runtime.md) | App、Runtime、主役AIの役割分担 |
 | [活用例](use-cases.md) | 日常、事業、契約、開発、AI回答Reviewでの使い方 |
-| [公開サンプル](../examples/README.md) | 具体的な入力と8項目のResult |
+| [公開Sample](../examples/README.md) | 具体的な入力と8項目のResult |
 
 ---
 
@@ -45,9 +55,10 @@ AsteraのDocumentationは、初めて知る人、Astera Appを使う人、判断
 
 | Document | 分かること |
 |---|---|
-| [連携の考え方](integrations.md) | 主役AI、File、Storage、Share、認証、決済、Developer APIとの関係 |
-| [App画面一覧](app-screen-map.md) | Developer ModeやAccount画面の位置付け |
-| [Support](../SUPPORT.md) | 質問、不具合、Account問題の窓口 |
+| [現在の公開状態](current-status.md) | Developer API、認証、決済、Storage等が現在の公開実績に含まれるか |
+| [連携の考え方](integrations.md) | 主役AI、File、Storage、Share、認証、決済、Developer APIの設計上の関係 |
+| [App画面一覧](app-screen-map.md) | Developer ModeやAccount画面のSource上の位置付け |
+| [Support](../SUPPORT.md) | 質問、不具合、Security以外の連絡方法 |
 | [Security Policy](../SECURITY.md) | Security問題の報告方法 |
 
 ---
@@ -56,9 +67,10 @@ AsteraのDocumentationは、初めて知る人、Astera Appを使う人、判断
 
 | Document | 分かること |
 |---|---|
+| [現在の公開状態](current-status.md) | 現在、公開実績として紹介できる範囲 |
 | [Press Kit](press-kit.md) | 正式名称、短い説明、標準紹介文、Product構成、英語説明 |
 | [活用例](use-cases.md) | 具体的に何へ使えるか |
-| [公開サンプル](../examples/README.md) | 紹介に使える入出力例 |
+| [公開Sample](../examples/README.md) | 紹介に使える入出力例 |
 | [Trademark](../TRADEMARKS.md) | Astera名称・Logoの扱い |
 
 ---
@@ -80,9 +92,10 @@ python3 scripts/check_docs.py
 ## 迷った場合
 
 - Asteraが何か知りたい → [README](../README.md)
-- Appを操作したい → [Astera App完全ガイド](app-guide.md)
-- 目的の画面を探したい → [App画面一覧](app-screen-map.md)
+- 現在何が公開済みか知りたい → [現在の公開状態](current-status.md)
+- App Sourceの内容を確認したい → [Astera App Guide](app-guide.md)
+- 目的のRoute・画面を探したい → [App画面一覧](app-screen-map.md)
 - Resultの意味を知りたい → [Asteraの仕組み](how-it-works.md)
-- 実例を見たい → [公開サンプル](../examples/README.md)
-- Login・Credit・決済で困った → [Account・Security・Plan・Credit](account-security-and-billing.md)
+- 実例を見たい → [公開Sample](../examples/README.md)
+- Account・Credit・決済の現在地を知りたい → [Account・Security・Plan・Credit](account-security-and-billing.md)
 - 問い合わせたい → [Support](../SUPPORT.md)
