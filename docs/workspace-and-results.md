@@ -1,91 +1,60 @@
-# Workspace・結果管理
+# Workspace・Result管理
 
-Astera Appでは、実行結果を一度読んで終わりにせず、Project、History、Turn、Shareを使って継続的に扱います。
+このDocumentは、Astera App SourceにあるProject、History、Turn、Result、Shareの構成と、現在の実装状態を説明します。
 
-このDocumentでは、同じテーマを何度も検討するときに、情報が散らからない使い方を説明します。
+Routeや画面がSourceへ存在することと、Server保存・検索・共有が本番で利用できることは別です。
 
----
-
-## 1. 単発の実行と継続Projectの違い
-
-### 単発の実行
-
-一度の比較や確認で終わる内容です。
-
-例：
-
-- 今日買う商品を3つ比較する
-- 受け取ったAI回答を確認する
-- 一件のError原因候補を整理する
-
-### 継続Project
-
-条件や資料が増え、何度も判断を更新する内容です。
-
-例：
-
-- 新サービス公開
-- 転職・独立準備
-- 契約更新
-- System移行
-- 事業計画
-- 長期間の購入・導入検討
-
-継続Projectでは、前回結果だけを見るのではなく、**前回から増えた事実、変わった条件、解決した前提不足**を確認します。
+最新の公開判定は[現在の公開状態](current-status.md)を確認してください。
 
 ---
 
-## 2. Project
+## 現在の状態
 
-Projectは、同じ目的に関係する情報をまとめる場所です。
-
-Projectへまとめる対象は次のとおりです。
-
-- 背景と目的
-- 実行結果
-- 使用したFile
-- 比較候補
-- 未確認事項
-- 決定事項
-- 見直し条件
-- 共有先
-
-### Project名の付け方
-
-後から見て目的が分かる名前にします。
-
-良い例：
-
-- 2026年予約System移行
-- Astera公開用Repository作成
-- 事務所移転候補比較
-- A社契約更新判断
-
-分かりにくい例：
-
-- 新規
-- Test
-- 質問1
-- 確認用
-
-### Projectの最初に残す内容
-
-```text
-目的：何を決めるProjectか
-期限：いつまでに判断するか
-成功条件：何を満たせば成功か
-制約：予算、人数、時間、使えない方法
-避けたい失敗：何が起きたら問題か
-現在の候補：比較中の案
-```
+| 領域 | Source状態 | 公開上の扱い |
+|---|---|---|
+| Result Section表示 | Source実装済み | Frontend構成として公開可能 |
+| Turn Rail | Source実装済み | Frontend操作として公開可能 |
+| Section／全体Copy | Source実装済み | Frontend操作として公開可能 |
+| Markdown Download | Source実装済み | Frontend操作として公開可能 |
+| 端末共有 | Source実装済み | Frontend操作として公開可能 |
+| Project Route・画面 | Source実装済み | Server保存は未確認 |
+| History Route・画面 | Source実装済み | 実Data取得・検索は未確認 |
+| Result詳細Route | Source実装済み | Backend Result ID連携は未確認 |
+| Public／Private Share Route | Source実装済み | URL発行・認可・停止は未確認 |
 
 ---
 
-## 3. Turn
+## 1. Result
 
-一つの作業の中で行った各実行をTurnとして扱います。
+Frontend Sourceは、Responseを次の8項目へ割り当てる構成です。
 
-Turnを分けると、次の流れを追えます。
+1. 本当の目的
+2. 前提不足
+3. 事実確認
+4. 危機察知
+5. 反対視点
+6. 比較案
+7. 推奨判断
+8. 主役AIへの再指示
+
+Result Sectionの表示、Section単位Copy、Result全体Copy、Markdown生成はSource実装として公開できます。
+
+Responseを返すBackend EndpointとSchemaのProduction確認は、現在の公開実績には含めません。
+
+---
+
+## 2. Turn
+
+一つの作業内で行う各実行をTurnとして扱う構成です。
+
+現在のFrontend Sourceには次があります。
+
+- Turn Rail
+- Turn間移動
+- Turn名変更
+- Turn削除
+
+想定するFlow：
 
 ```text
 Turn 1：最初の相談
@@ -95,149 +64,131 @@ Turn 4：Riskを優先して再評価
 Turn 5：最終判断用に整理
 ```
 
-### Turnを増やす意味
-
-最初の入力だけでは足りないことがあります。
-
-前提不足や事実確認を読んで情報を追加し、判断を更新することで、結論の理由が明確になります。
-
-### Turn Title
-
-内容が分かるTitleへ変更しておくと、後から探しやすくなります。
-
-例：
-
-- 初回比較
-- 移行費用追加後
-- Security条件追加
-- 取引先回答反映
-- 最終判断
+TurnをServerへ保存し、後日または別端末で取得する動作は未確認です。
 
 ---
 
-## 4. Result詳細
+## 3. Project
 
-Result詳細では、実行時の入力と8つの判断材料を一緒に確認します。
+Project Routeと画面経路はSourceにあります。
 
-確認する順番は次のとおりです。
+設計上は、同じ目的に関係する次の情報をまとめます。
 
-1. 入力が正しく残っているか
-2. 選んだ目的が合っているか
-3. 使ったFileやOptionが合っているか
-4. 前提不足が解決したか
-5. 事実と推測が混ざっていないか
-6. 危機と停止条件が入っているか
-7. 比較案が同じ条件で評価されているか
-8. 推奨判断の成立条件が明確か
+- 背景と目的
+- 実行Result
+- 関連File
+- 比較候補
+- 未確認事項
+- 決定事項
+- 見直し条件
+- Share状態
+
+現在公開できるのは、Project画面とAPI境界のSource実装です。
+
+Project作成、保存、更新、削除、別Sessionでの再取得等はBackend接続確認前です。
 
 ---
 
-## 5. History
+## 4. History
 
-Historyは、過去の実行を探すための画面です。
+History Routeと画面経路はSourceにあります。
 
-探すときに使う情報は次のとおりです。
+設計上は、次の条件から過去の実行を探します。
 
 - Title
 - 日時
 - 目的
 - Project
-- 入力内容
 - Result状態
 - File
 - Share状態
 
-### 古い結果を使うときの注意
-
-古い結果は、その時点の情報に基づいています。
-
-次が変わっている場合は、再実行します。
-
-- 価格
-- 期限
-- 法律・規約
-- 人数
-- 契約条件
-- System構成
-- 利用者の希望
-- Riskの大きさ
+実History Dataの保存、検索、Paging、別端末同期等はBackend接続確認前です。
 
 ---
 
-## 6. コピー・Download・共有
+## 5. Result詳細
 
-### 項目単位コピー
+`/app/results/:id`のRoute Patternがあります。
 
-「前提不足だけ」「主役AIへの再指示だけ」など、必要な項目を再利用します。
+設計上は、次を一緒に確認します。
 
-### 結果全体コピー
+- 元の入力
+- 選択した目的
+- 使用したTemplate・Option・File情報
+- 実行日時
+- Result状態
+- 8つの判断材料
+- Projectとの関係
+- Share状態
 
-8項目をまとめて別のDocumentやAIへ渡します。
+BackendからResult IDを取得し、正しいDataを表示するProduction動作は未確認です。
+
+---
+
+## 6. Copy・Download・端末共有
+
+現在のFrontend Sourceには次の操作があります。
+
+### Section単位Copy
+
+「前提不足だけ」「主役AIへの再指示だけ」等、必要なSectionを再利用します。
+
+### Result全体Copy
+
+8項目をまとめて別Documentや主役AIへ渡します。
 
 ### Markdown Download
 
-見出し構造を保ったまま保存し、議事録、設計書、検討資料へ利用します。
+見出し構造を保ったTextとして保存する処理があります。
 
 ### 端末共有
 
-スマートフォンやTabletでは、OSの共有機能を使って送信できます。
+BrowserまたはNative Shellから、端末の共有機能へ渡す構成です。
+
+これらはFrontend Source実装範囲です。実端末ごとの確認は[Mobile・Tablet・Accessibility](mobile-and-accessibility.md)の状態に従います。
 
 ---
 
 ## 7. Share
 
-### Public Share
-
-共有用URLから結果を見せる方法です。
-
-外部へ見せる前に確認する内容：
-
-- 個人名
-- Email、電話番号、住所
-- 顧客情報
-- 契約金額
-- API KeyやPassword
-- 社内URL
-- File名
-- 未公開Project名
-
-### Private Share
-
-Loginや権限を使い、限られた相手と共有します。
-
-### Share管理
-
-作成済みShareを一覧で確認し、停止、期限変更、再発行を管理します。
-
----
-
-## 8. 判断の変更履歴を残す
-
-Asteraの結果は、常に同じ結論を守るためのものではありません。
-
-新しい事実によって結論が変わることは正常です。
-
-Projectでは、次を残すと判断の経緯が分かります。
+次のRoute Patternがあります。
 
 ```text
-変更前の判断：A案
-変更の原因：費用条件と納期が変更
-追加された事実：初期費用が2倍、移行期間が1か月延長
-新しい判断：B案を段階導入
-見直し日：2026-09-01
+/s/:token
+/share/:id
+/app/shares
 ```
+
+設計上の役割：
+
+- Public Share：共有用URLからResultを表示する
+- Private Share：Login・権限を前提にResultを表示する
+- Share管理：期限、公開状態、停止等を管理する
+
+現在公開できるのはRoute・画面構成です。
+
+Token発行、認可、期限、停止、Data非公開化、URL無効化等のBackend動作は未確認です。
 
 ---
 
-## 9. 主役AIと組み合わせる
+## 8. Fileとの関係
 
-主役AIへ渡す場合は、8番目の再指示だけでなく、関連する判断材料も一緒に渡します。
+ProjectやResultへFileを関連付ける画面構成があります。
+
+現在のFrontend Sourceで扱うのは、File名、Size、Type等のMetadataです。
+
+File本体のUpload、保存、Download、内容解析、Project間共有は現在の公開実績に含めません。
+
+---
+
+## 9. 主役AIへの再利用
+
+8番目の「主役AIへの再指示」と関連SectionをCopyし、別の生成AIへ渡す使い方はPublic DocumentationとSampleで説明できます。
 
 例：
 
 ```text
-以下はAsteraで整理した判断材料です。
-
 【本当の目的】
 ...
 
@@ -254,37 +205,26 @@ Projectでは、次を残すと判断の経緯が分かります。
 ...
 ```
 
-これにより、主役AIが不足部分を勝手に補いにくくなります。
+これはAsteraの公開済みUse Caseです。
 
 ---
 
-## 10. おすすめの運用
+## 現在の公開範囲まとめ
 
-### 毎回新しいProjectを作らない
-
-同じ目的なら既存Projectを使います。
-
-### 結論だけを保存しない
-
-前提不足、事実、Risk、比較案も残します。
-
-### File名だけで判断しない
-
-何のために使ったFileかを入力へ書きます。
-
-### 共有URLを放置しない
-
-不要になったShareは停止します。
-
-### 条件が変わったら再評価する
-
-古い推奨を絶対条件にしません。
+| 項目 | 判定 |
+|---|---|
+| Resultの8 Section構成 | 公開可能 |
+| Turn・Copy・Markdown・端末共有のSource実装 | 公開可能 |
+| Project・History・Result詳細・ShareのRoute構成 | 公開可能 |
+| Serverへの保存・検索・同期 | 未確認 |
+| Share URL発行・認可・停止 | 未確認 |
+| File本体保存・解析 | 未確認 |
 
 ---
 
 ## 関連Document
 
-- [Astera App完全ガイド](app-guide.md)
-- [はじめかた](getting-started.md)
+- [現在の公開状態](current-status.md)
+- [Astera App Guide](app-guide.md)
+- [App画面一覧](app-screen-map.md)
 - [Asteraの仕組み](how-it-works.md)
-- [Account・Security・Plan・Credit](account-security-and-billing.md)
