@@ -1,363 +1,395 @@
-# Astera App完全ガイド
+# Astera App Guide
 
-Astera Appは、質問を一度入力して終わるだけの画面ではありません。
+このDocumentは、Astera Appの**現在のSource実装範囲**を説明します。
 
-**入力、目的選択、資料、Project、History、結果、共有、設定、Account、Security、Plan、Credit、Developer機能までを、一つのApplicationで扱うための利用者向けFrontend**です。
+操作画面やRouteがSourceへ存在することと、Backend・認証・決済・Storage・Production環境を含めて実際に利用できることは同じではありません。
 
-このDocumentでは、Astera Appを初めて使う人が「どこを開き、何を行い、結果をどう残すのか」を順番に説明します。
-
-> 表示される機能や選択肢は、利用中のPlan、公開環境、接続済みサービスによって異なる場合があります。
+最新の公開判定は[現在の公開状態](current-status.md)を正本とします。
 
 ---
 
-## 1. 画面全体の考え方
+## 状態の読み方
 
-Astera Appの中心は、**新しい実行**です。
+| 表記 | 意味 |
+|---|---|
+| 公開済み | Public Repositoryで内容を確認できる |
+| Source実装済み | Frontend Source、Route、画面、処理が存在する |
+| 接続確認前 | Backendや外部Serviceを含む実動作をまだ公開実績に含めない |
+| 実機確認前 | Smartphone、Tablet、Android、iOS等の実端末確認を公開実績に含めない |
 
-そこから、同じ目的の作業をProjectへまとめ、過去の実行をHistoryで探し、SettingsやAccountで利用環境を管理します。
+---
+
+## 1. App全体の現在地
+
+Astera Appは、React、TypeScript、Vite、Capacitorの共通Sourceを、Web、Android、iOSへ展開する構成です。
+
+現在のSourceには、43のRoute Patternと、次の画面領域が含まれています。
 
 ```text
 Astera App
-├─ 新しい実行
-│  ├─ 入力
-│  ├─ 目的選択
-│  ├─ File・情報源
-│  ├─ Template・Option
-│  └─ 8つの判断材料
-├─ Project
-├─ History
-├─ Result詳細
-├─ Share管理
+├─ 新しい実行・Result
+├─ Project・History・Turn
 ├─ Settings
-│  ├─ Option
-│  ├─ 表示・言語
-│  ├─ Template
-│  ├─ Storage
-│  ├─ Data・Privacy
-│  └─ 通知・Credit警告
-├─ Account
-│  ├─ Security
-│  ├─ Plan・Subscription
-│  ├─ Credit
-│  └─ Billing Status
-└─ Developer Mode
+├─ Account・Security
+├─ Plan・Credit・Billing
+├─ Developer Mode
+├─ Public／Private Share
+├─ Legal・Status・Support
+└─ Web・Smartphone・Tablet・Native Shell
 ```
 
-PCではSidebarを使って各画面へ移動します。スマートフォンでは画面を広く使うため、HeaderとDrawerへNavigationをまとめます。
+現在公開できる事実は、これらの**画面経路とFrontend処理がSourceへ実装されていること**です。
+
+Account、決済、Storage、Share、Developer API等が本番で利用可能であるとは、まだ表記しません。
 
 ---
 
-## 2. 新しい実行
+## 2. 新しい実行画面
 
-新しい実行は、Asteraへ相談や資料を渡す画面です。
+新しい実行画面は、Asteraへ渡す内容と処理条件を設定するFrontendです。
 
-入力できるものは質問だけではありません。
+現在のSourceでは、次を扱います。
+
+- Text入力
+- 目的選択
+- File選択UI
+- Project情報の選択UI
+- Template
+- 追加Option
+- 実行開始
+- 処理段階表示
+- 停止操作
+- Result表示
+- Turn移動
+
+実際のResult生成はBackend EndpointとResponse Schemaに依存します。Production接続を含む動作確認が終わるまで、Frontend画面の存在だけで「実行可能」とは表記しません。
+
+---
+
+## 3. 入力
+
+入力欄には、質問だけでなく次の内容を入れる構成です。
 
 - 迷っていること
 - 複数案の比較
-- 企画書や事業計画
-- 作業手順
-- 契約や提案の確認事項
-- 障害や失敗の状況
+- 企画・計画
+- 資料の確認目的
 - AIが作った回答
+- 障害や失敗の状況
+- 契約や提案の確認事項
 - 改善したい文章や設計
 - 調査前に整理したい論点
 
-### 入力するときに入れるとよい情報
+判断材料を具体的にするため、次の情報を一緒に入れることを想定しています。
 
-次の情報があると、Asteraはより具体的な判断材料を作れます。
-
-- **目的**：最終的に何を決めたいか
-- **背景**：なぜ今この問題が起きているか
-- **期限**：いつまでに決める必要があるか
-- **制約**：予算、人数、使える時間、利用できない手段
-- **候補**：すでに考えている案
-- **避けたいこと**：失敗、損失、関係悪化、停止できない状態
-- **確認済みの事実**：数字、日時、契約条件、実際に起きたこと
-- **自分の推測**：まだ確認できていないが、そう考えていること
-
-### 短い入力でも使える
-
-文章を最初から完璧にする必要はありません。
-
-```text
-予約システムを変更するか迷っています。
-候補はA、B、Cです。
-料金は下げたいですが、スタッフ5人が迷わず使えることを優先したいです。
-```
-
-この入力から、Asteraは不足している条件や確認すべき比較項目を見つけます。
+- 最終的な目的
+- 背景
+- 期限
+- 予算・人数・時間等の制約
+- 現在の候補
+- 確認済みの事実
+- 未確認の推測
+- 避けたい失敗
 
 ---
 
-## 3. 目的を選ぶ
+## 4. 目的選択
 
-同じ文章でも、何をしたいかによって見るべき場所が変わります。
+現在のFrontend Sourceには、次の10種類の目的が定義されています。
 
-Astera Appでは、目的を明示して実行できます。
+| 目的 | 想定する使い方 |
+|---|---|
+| 自動 | 入力内容から見る方向を選ぶ |
+| Review | 資料・計画・提案の抜けを確認する |
+| 比較 | 複数案を同じ条件で比べる |
+| 検証 | 説明・根拠・結論が成立するか確認する |
+| 改善 | 現在案の弱点と改善方向を整理する |
+| 調査 | 調べるべき項目と情報源を整理する |
+| 計画 | 順序、依存関係、停止条件を整理する |
+| 検討 | 方向を決める前に複数視点を出す |
+| 判断 | 最終選択に必要な成立条件を整理する |
+| 原因 | 問題の原因候補と確認順を整理する |
 
-| 目的 | 使う場面 | 特に重視すること |
-|---|---|---|
-| 自動 | 目的を決めず、内容から適した見方を選びたい | 入力全体 |
-| レビュー | 資料、計画、提案の抜けを確認したい | 不足、矛盾、Risk |
-| 比較 | 複数案を同じ条件で比べたい | 比較条件、差、適用条件 |
-| 検証 | 説明や結論が本当に成り立つか確認したい | 根拠、前提、反証 |
-| 改善 | 現在の案をより良くしたい | 弱点、改善案、優先順位 |
-| 調査 | 何を調べるべきか先に整理したい | 調査項目、情報源、未確認事項 |
-| 計画 | 実行順や依存関係を整理したい | 順序、担当、判断点、停止条件 |
-| 検討 | まだ方向を絞らず広く考えたい | 複数視点、代替案 |
-| 判断 | 最終選択に必要な条件を整理したい | 推奨、成立条件、再評価条件 |
-| 原因 | 問題が起きた理由を切り分けたい | 事実、仮説、確認順、再現条件 |
-
-複数の目的を組み合わせる場合は、「比較しながらRiskも確認する」「計画をレビューする」といった使い方ができます。
+目的選択UIがSourceへ存在することは確認済みです。目的ごとのBackend処理結果は、実接続確認後に利用可能範囲へ加えます。
 
 ---
 
-## 4. File・Project情報・Template
+## 5. Templateと追加Option
 
-### File
+現在のSourceには、次のTemplateが定義されています。
 
-実行へ関連するFileを追加し、どの資料を前提に判断するのかを明確にできます。
+- Review
+- 比較
+- 計画
+- Risk確認
 
-たとえば次のような使い方です。
+追加Optionとして、次の選択UIがあります。
 
-- 企画書をレビューする
-- 契約書の確認項目を整理する
-- 複数の見積書を比較する
-- Error Logと変更内容から原因候補を整理する
-- AI回答を保存したTextとして確認する
+- 高精度翻訳
+- 文書生成
+- 高度な書き換え
 
-Fileを追加しただけで目的が自動的に伝わるとは限りません。入力欄へ「このFileの何を確認したいか」も書くと、結果が分かりやすくなります。
-
-### Project情報
-
-Projectに関係する資料や過去の判断を参照しながら、新しい実行を行うための入口です。
-
-同じ目的の作業を続ける場合は、毎回すべての背景を最初から説明するのではなく、Projectにまとめて扱います。
-
-### Template
-
-Templateは、よく使う確認方法を入力へ追加する機能です。
-
-- 資料レビュー
-- 複数案比較
-- 実行計画
-- Risk優先確認
-
-Templateは結論を固定するものではありません。**何を見落とさずに確認するか**をそろえるために使います。
-
-### Option
-
-翻訳、文書作成、高度な書き換えなど、通常の判断材料生成に追加する処理を選ぶ画面です。
-
-Optionを使う場合は、実行前に対象と目的を確認します。たとえば翻訳では、内容を勝手に要約せず、原文の構造を保つ必要があるかを指定します。
+これらはFrontend上の選択肢です。各Optionの外部処理・課金・完成Outputまでを現在利用可能とは表記しません。
 
 ---
 
-## 5. 実行中の表示
+## 6. File機能
 
-Astera Appは、処理中に何を行っているかを段階として表示します。
+File選択UIとFile Metadataを扱うSourceは存在します。
 
-主な見え方は次のとおりです。
+現在Payloadへ含める構造があるのは、主に次の情報です。
+
+- File名
+- Size
+- Type
+
+**File本体をUploadし、内容を読み取って判断材料へ反映する動作は、現在の公開実績に含めません。**
+
+そのため、現在公開できる説明は「Fileを選択し、関連FileのMetadataを実行条件へ含める画面がある」までです。
+
+企画書、見積書、契約書、Log等を実際に解析できるという表記は、Upload・Storage・解析Backendの確認後に追加します。
+
+---
+
+## 7. 実行Payloadと安全停止
+
+現在のFrontend Sourceでは、入力内容を次のような情報へまとめてAPIへ渡す構成です。
+
+- Input
+- Purpose
+- Additional Option
+- File Metadata
+- Template
+
+API Baseがない、Endpointが応答しない、Response Schemaが合わない等の場合に、Mockの成功結果へ置き換えないFail-Closed方針です。
+
+つまり、接続できていない状態を「成功したように見せる」ことは、現在のSource方針に含めません。
+
+---
+
+## 8. 処理段階表示
+
+Frontendには、処理中の状態を段階表示する構造があります。
+
+想定される表示は次の流れです。
 
 1. 判断材料を読み込む
 2. 情報を確認する
 3. 条件を照合する
 4. 複数案を比較する
-5. 結果を構造化する
-6. 8つの項目へ出力する
+5. Resultを構造化する
+6. 8つの項目へ割り当てる
 
-実行を止める必要がある場合は、停止操作を使います。
-
----
-
-## 6. 結果の読み方
-
-結果は、長い一枚の回答ではなく、8つの判断材料へ分けて表示されます。
-
-### 01 本当の目的
-
-入力に書かれた依頼をそのまま繰り返すのではなく、最終的に達成したい状態を整理します。
-
-### 02 前提不足
-
-結論を出す前に確認する必要がある条件です。
-
-ここが多い場合は、すぐに最終判断せず、追加情報を集めて再実行します。
-
-### 03 事実確認
-
-確認できる事実、まだ確認できないこと、意見や推測を分けます。
-
-### 04 危機察知
-
-失敗、費用、時間、安全、信用、継続運用などのRiskを整理します。
-
-### 05 反対視点
-
-現在の案へ賛成する立場だけでなく、慎重な立場や前提を疑う立場から見直します。
-
-### 06 比較案
-
-主案だけでなく、延期、段階実行、対象限定、別手段などを同じ条件で比較します。
-
-### 07 推奨判断
-
-現時点で妥当な案を示します。
-
-結論だけでなく、成立条件、確認事項、停止・再評価条件を一緒に読みます。
-
-### 08 主役AIへの再指示
-
-判断材料を使って、主役AIへ最終回答を作らせるための具体的な依頼です。
+この表示はFrontend Source実装範囲です。各段階でBackendが実際に行う処理との一致は、接続検証後に公開判定します。
 
 ---
 
-## 7. Resultの再利用
+## 9. 8つの判断材料
 
-Astera Appでは、結果を読んで終わりにせず、次の作業へ使います。
+Responseを次の8項目へ割り当てるFrontend Mappingがあります。
 
-- 各項目だけをコピーする
-- 結果全体をコピーする
-- Markdownとして保存する
-- 端末の共有機能で送る
-- Projectへ残す
-- Historyから開き直す
-- 不足情報を追加して再実行する
-- 主役AIへの再指示を別のAIへ渡す
+1. 本当の目的
+2. 前提不足
+3. 事実確認
+4. 危機察知
+5. 反対視点
+6. 比較案
+7. 推奨判断
+8. 主役AIへの再指示
 
-結果の管理方法は[Workspace・結果管理](workspace-and-results.md)で詳しく説明します。
+Resultは一枚の長文ではなく、項目ごとに確認する構成です。
 
----
-
-## 8. Project
-
-Projectは、同じ目的に関係する実行、資料、結果をまとめる場所です。
-
-例：
-
-- 新サービス公開Project
-- 転職判断Project
-- 契約更新Project
-- Web障害調査Project
-- 購入候補比較Project
-
-Projectを使うと、単発の質問では見えにくい「前回から何が変わったか」「どの条件が未確認のままか」「以前の推奨が今も成立するか」を確認しやすくなります。
+Astera v8の処理内容は[Asteraの仕組み](how-it-works.md)をご覧ください。
 
 ---
 
-## 9. History
+## 10. TurnとResult再利用
 
-Historyでは、過去の実行や結果を探します。
+現在のFrontend Sourceには、次の操作があります。
 
-探すときは、次の情報が役立ちます。
+- Turn Rail
+- Turn間の移動
+- Turn名の変更
+- Turn削除
+- Section単位のCopy
+- Result全体のCopy
+- Markdown Download
+- 端末共有
 
-- 実行した日時
-- 入力のTitle
-- 選択した目的
-- 関連Project
-- 結果の状態
-- 使用したFileやOption
+CopyとMarkdown生成はFrontendで扱う範囲です。
 
-過去の結果は、当時の前提に基づく判断です。新しい事実が増えた場合は、そのまま再利用せず、条件を更新して再実行します。
-
----
-
-## 10. Settings
-
-### Option設定
-
-利用する追加機能、表示する選択肢、既定の動作を管理します。
-
-### 表示・言語
-
-- 表示言語
-- Light／Dark／System連動
-- 全画面入力の既定動作
-- 動きを抑える設定
-
-### 個別Template管理
-
-自分が繰り返し使う確認条件や書式をTemplateとして扱います。
-
-### 外部Storage接続
-
-外部Storageへ保存する場合の接続先と状態を管理します。
-
-### Astera Storage
-
-契約容量、使用量、残量、保存されたFileを確認するための画面です。
-
-### Data・Privacy
-
-保存、共有、外部接続、履歴など、Dataの扱いに関係する設定を確認します。
-
-### 通知・Credit警告
-
-実行停止につながる重要通知、Credit残高、任意通知の受け取り方を管理します。
+Project保存、History保存、Server側Result ID、Share URLの発行等はBackend接続を含むため、現在の公開実績には含めません。
 
 ---
 
-## 11. Account
+## 11. ProjectとHistory
 
-Account画面では、Asteraの利用者情報と契約状態を確認します。
+ProjectとHistoryのRoute・画面経路はSourceへ実装されています。
 
-- Profile
-- Account状態
-- 現在のPlan
-- Credit残高
-- Security状態
-- 支払い状態
-- 接続中の認証方法
+設計上の役割は次のとおりです。
 
-Security、Plan、Creditの詳細は[Account・Security・Plan・Credit](account-security-and-billing.md)をご覧ください。
+- **Project**：同じ目的の実行、資料、Result、判断変更をまとめる
+- **History**：過去の実行を日時や条件から探す
 
----
+ただし、実Dataの保存、取得、検索、同期はBackend EndpointとDatabaseに依存します。
 
-## 12. Developer Mode
-
-Developer Modeは、Asteraを別のApplication、業務System、独自UIなどから利用するための管理画面です。
-
-主な用途は次のとおりです。
-
-- API利用状態の確認
-- API Keyの発行・停止・更新
-- 使用量とCreditの確認
-- 接続先ごとの管理
-- Errorや停止理由の確認
-- API利用規約の確認
-
-通常のAstera App利用とDeveloper APIは、同じ利用者AccountとCredit管理の中で扱います。
+そのため、現在は「Project・History画面のSource実装」を公開範囲とし、「実Dataを保存・再取得できること」は接続確認後の判定対象です。
 
 ---
 
-## 13. Public ShareとPrivate Share
+## 12. Settings
 
-Astera Appでは、結果を用途に応じて共有します。
+Source上には、次のSettings Routeがあります。
 
-### Public Share
+- Option
+- 表示・言語
+- Template
+- 外部Storage接続
+- Astera Storage
+- Data・Privacy
+- 通知・Credit警告
 
-URLを知っている相手へ、共有用に整えた結果を見せる方法です。
+Theme、表示言語、全画面入力、Reduced Motion等のFrontend設定を扱う構造があります。
 
-共有前に、個人情報、契約情報、社内情報、File名などが含まれていないか確認します。
-
-### Private Share
-
-Loginや権限を前提として、限定された相手と共有する方法です。
-
-### Share管理
-
-作成済みの共有URL、公開状態、期限、停止を一つの画面で管理します。
+外部Storage、契約Storage容量、通知配信、Credit警告等は外部接続を含むため、現在利用可能とは表記しません。
 
 ---
 
-## 14. 困ったとき
+## 13. Account・Security
 
-- Loginできない：Password再設定、Email確認、2FA Challengeを確認する
-- 実行できない：入力、接続状態、Credit、System Statusを確認する
-- 結果が具体的でない：目的、期限、制約、事実、候補を追加して再実行する
-- Fileを使った結果がずれる：Fileの何を確認したいかを入力欄へ書く
-- 過去の結果と結論が変わった：追加情報や条件の違いを比較する
-- 共有を止めたい：Share管理から対象を停止する
+Source上には次のRoute・画面経路があります。
 
-一般的な質問は[FAQ](faq.md)、問い合わせ方法は[Support](../SUPPORT.md)をご覧ください。
+- Login
+- Account登録
+- Email確認
+- Password再設定
+- Astera用Password設定
+- 二段階認証Challenge
+- Account概要
+- Account Security
+
+Security画面の設計には、Password、Passkey、二段階認証、Backup Code、接続Account、Session等が含まれます。
+
+現在公開できるのは、Route・画面・API境界のSource実装です。
+
+認証Provider、Session、Email送信、Passkey登録、二段階認証の本番動作は、実接続確認が終わるまで利用可能機能として扱いません。
+
+---
+
+## 14. Plan・Credit・Billing
+
+Source上には次のRoute・画面経路があります。
+
+- 料金・Plan
+- Plan・Subscription
+- Credit
+- Checkout
+- Billing Status
+
+設計上は、Plan、Credit残高、購入、利用履歴、決済状態等を扱います。
+
+Square等の外部決済、Credit Ledger、反映処理、返金・補填、停止・復帰処理は実接続確認前です。
+
+現在は、これらの画面構成とFrontend境界を公開し、購入可能・決済可能とは表記しません。
+
+---
+
+## 15. Developer Mode
+
+Developer ModeのRouteと管理画面構成はSourceへ実装されています。
+
+設計上の管理対象は次のとおりです。
+
+- API利用状態
+- API Key
+- 使用量
+- Credit
+- 接続先
+- Error・停止理由
+- API Terms
+
+Developer APIのEndpoint、Key発行、権限、使用量計測、課金を含む実運用は、現在の公開実績には含めません。
+
+---
+
+## 16. Share
+
+Public Share、Private Share、Share管理のRouteはSourceへ実装されています。
+
+設計上は、公開URL、限定共有、期限、停止等を扱います。
+
+実際のShare発行、認可、保存、停止、期限処理はBackend接続を含むため、現在利用可能とは表記しません。
+
+---
+
+## 17. Web・Smartphone・Tablet
+
+共通Frontend Sourceには次のResponsive対応が含まれます。
+
+- Desktop Sidebar
+- Smartphone Header・Drawer
+- Tablet幅への対応
+- OrientationとWindow Resize
+- Visual Viewport
+- Safe Area
+- Touch Target
+- Software Keyboard対策
+- Reduced Motion
+- Light／Dark
+- Hoverなし端末への対応
+- Horizontal Overflow防止
+
+これらはSource実装範囲です。
+
+実Smartphone Browser、実Tablet、Foldable、Android実機、iPhone／iPad実機での確認は、現在の公開実績に含めません。
+
+詳細は[Mobile・Tablet・Accessibility](mobile-and-accessibility.md)をご覧ください。
+
+---
+
+## 18. Android・iOS
+
+Capacitorを利用したAndroid／iOS Native Shell用の設定とWorkflowがあります。
+
+現在の公開実績には、次を含めません。
+
+- Android APK／AABの実Build成功
+- Android実機動作
+- iOS Simulator Build成功
+- iPhone／iPad実機動作
+- TestFlight
+- Google Play公開
+- App Store公開
+
+Native Appを公開済みとは表記しません。
+
+---
+
+## 現在公開できるApp情報のまとめ
+
+| 項目 | 公開上の扱い |
+|---|---|
+| Appの目的・画面構成 | 公開可能 |
+| 43 Route Pattern | Source実装として公開可能 |
+| 入力・目的・Template・Option UI | Source実装として公開可能 |
+| Result Mapping・Turn・Copy・Markdown | Source実装として公開可能 |
+| Responsive・Native Shell設定 | Source実装として公開可能 |
+| Backendを含む実行 | 確認前 |
+| File内容解析 | 確認前 |
+| Project・History・Shareの実保存 | 確認前 |
+| Account・認証・Securityの実運用 | 確認前 |
+| Plan・Credit・決済 | 確認前 |
+| Developer API | 確認前 |
+| Android・iOS実機／Store | 確認前 |
+
+---
+
+## 関連Document
+
+- [現在の公開状態](current-status.md)
+- [App画面一覧](app-screen-map.md)
+- [Astera AppとAstera v8](app-and-runtime.md)
+- [Asteraの仕組み](how-it-works.md)
+- [Workspace・結果管理](workspace-and-results.md)
+- [Account・Security・Plan・Credit](account-security-and-billing.md)
+- [Mobile・Tablet・Accessibility](mobile-and-accessibility.md)
