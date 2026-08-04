@@ -1,16 +1,33 @@
 # 連携の考え方
 
-Asteraは、すべてを一つのApplicationへ閉じ込めるものではありません。
+このDocumentは、Astera App、Astera v8、主役AI、File、Storage、認証、決済、Developer APIの**設計上の関係**と現在の接続状態を説明します。
 
-Astera Appで入力と結果を管理し、Astera v8で判断材料を作り、必要に応じて主役AI、Storage、Developer APIなどへつなぎます。
+連携先を説明していることは、現在そのServiceが本番接続済みであることを意味しません。
 
-このDocumentでは、各連携が何のためにあるのかを利用者向けに説明します。
+最新の公開判定は[現在の公開状態](current-status.md)を確認してください。
 
 ---
 
-## 1. 主役AIとの連携
+## 現在の状態
 
-Asteraは、ChatGPT、Claude、Gemini、自作AI、自社AIなどを置き換えるものではありません。
+| 連携 | 現在の状態 |
+|---|---|
+| 主役AIへのCopy利用 | 公開Use Caseとして説明可能 |
+| File Metadata | Frontend Source実装済み |
+| File本体Upload・解析 | 接続確認前 |
+| Project・History | Route・画面実装済み、Server保存確認前 |
+| 外部Storage | Route・画面実装済み、接続確認前 |
+| Astera Storage | Route・画面実装済み、Storage Backend確認前 |
+| Public／Private Share | Route・画面実装済み、発行・認可確認前 |
+| Developer API | 管理画面・境界設計あり、提供確認前 |
+| Google／GitHub Login | Route・方針あり、Provider接続確認前 |
+| Plan・Credit・決済 | Route・画面あり、決済・Ledger確認前 |
+
+---
+
+## 1. 主役AIとの関係
+
+Asteraは、ChatGPT、Claude、Gemini、自作AI、自社AI等を置き換えるものではありません。
 
 役割は次のように分かれます。
 
@@ -22,89 +39,70 @@ Astera
 判断材料を使って、文章・計画・Code・説明へ仕上げる
 ```
 
-### 主役AIへ渡すもの
+AsteraのResultをCopyし、主役AIへ渡す使い方は、現在のPublic DocumentationとSampleで説明できます。
 
-- 本当の目的
-- 前提不足
-- 事実確認
-- 危機察知
-- 比較案
-- 推奨判断
-- 主役AIへの再指示
-
-### 使い方の例
-
-#### 提案書
-
-Asteraで提案の前提、Risk、比較案を整理し、主役AIへ提案書の文章化を依頼します。
-
-#### Code
-
-Asteraで要件、依存関係、失敗条件、検証項目を整理し、主役AIへ実装を依頼します。
-
-#### 問い合わせ回答
-
-Asteraで利用者の本当の問題と確認事項を整理し、主役AIへ分かりやすい回答を作らせます。
+専用APIによる自動連携は、Developer API確認後の公開範囲です。
 
 ---
 
-## 2. Fileとの連携
+## 2. File
 
-Astera Appでは、資料を実行へ追加できます。
+Frontend SourceにはFile選択UIとMetadataをPayloadへ含める構造があります。
 
-例：
+現在扱う構造：
 
-- 企画書
-- 見積書
-- 契約資料
-- AI回答
-- Error Log
-- 設計資料
-- 比較表
+- File名
+- Size
+- Type
 
-Fileを使うときは、「何を確認したいか」を入力へ書きます。
+現在の公開実績に含めないもの：
 
-Fileの存在だけでは、目的や優先順位は決まりません。
+- File本体Upload
+- Storage保存
+- 内容抽出
+- Document解析
+- 複数File比較
+- Resultへの内容反映
+
+したがって、「Fileを選択できる画面があること」と「File内容を解析できること」を分けて説明します。
 
 ---
 
-## 3. Projectとの連携
+## 3. Project・History
 
-Projectは、同じ目的に関係する実行、File、Resultをまとめます。
+ProjectとHistoryのRoute・画面経路はSourceへ実装されています。
 
-単発の入力と違い、Projectでは前回からの変化を扱えます。
+設計上の役割：
 
-- 新しい事実
-- 解決した前提不足
-- 変更された期限
-- 追加された候補
-- 新しいRisk
-- 推奨判断の変更
+- Project：同じ目的の実行、Result、File、判断変更をまとめる
+- History：過去の実行を検索・再利用する
+
+実Data保存、取得、検索、別端末同期等はBackend接続確認前です。
 
 ---
 
 ## 4. 外部Storage
 
-外部Storage接続は、FileやResultの保存先を管理するために使います。
+外部Storage接続用のRoute・画面経路があります。
 
-確認する内容：
+設計上は次を管理します。
 
-- どのStorageへ保存するか
-- 誰がアクセスできるか
+- 接続先
+- 権限
+- 保存先
 - 保存期間
-- 削除方法
-- Projectとの関連
-- Shareとの違い
+- 削除
+- Projectとの関係
 
-外部Storageへ保存する場合でも、Astera App上のProject名、Result、Share状態と混同しないようにします。
+現在、特定の外部Storageへ接続済みとは案内しません。
+
+OAuth、権限確認、Upload、Download、Delete、同期等は実接続確認前です。
 
 ---
 
 ## 5. Astera Storage
 
-Astera Storageは、Astera Account内で扱う保存領域です。
-
-主な管理項目：
+Astera Storage画面は、設計上次を扱います。
 
 - 契約容量
 - 使用量
@@ -115,37 +113,38 @@ Astera Storageは、Astera Account内で扱う保存領域です。
 - 容量変更
 - 保存停止状態
 
-保存容量と実行用Creditは別の目的を持ちます。
+現在はRoute・画面構成がSourceにあります。
+
+Storage Backend、容量計測、File保存、削除保証等は確認前です。
 
 ---
 
 ## 6. Share
 
-### Public Share
+次のRoute Patternがあります。
 
-共有用URLを使い、外部へ見せるための連携です。
+- Public Share
+- Private Share
+- Share管理
 
-### Private Share
+設計上は、共有URL、権限、期限、停止等を扱います。
 
-権限を持つ相手と限定共有するための連携です。
+現在の公開実績に含めないもの：
 
-ShareはStorageへの保存とは異なります。保存されていても共有されているとは限らず、共有を停止しても元のResultが削除されるとは限りません。
+- Share Token発行
+- Result Data保存
+- Public／Private認可
+- 期限切れ処理
+- URL停止
+- 共有解除後のAccess遮断
 
 ---
 
 ## 7. Developer API
 
-Developer Modeでは、Asteraの判断材料生成を外部Applicationや業務Systemから利用するためのAPIを管理します。
+Developer ModeのRouteと管理画面構成があります。
 
-利用例：
-
-- 自社の問い合わせ画面へ組み込む
-- 業務Systemのレビュー工程へ加える
-- 独自AIの前処理として利用する
-- Document確認Workflowへ組み込む
-- 障害対応の入力を一定形式へ整理する
-
-管理する項目：
+設計上の管理対象：
 
 - API Key
 - 接続先
@@ -154,33 +153,37 @@ Developer Modeでは、Asteraの判断材料生成を外部Applicationや業務S
 - 停止状態
 - Error
 - 権限
+- API Terms
 
-APIの具体的な仕様は、公開されている正式なAPI Documentを基準にします。
+現在、Developer APIを提供中とは案内しません。
+
+Endpoint、Schema、Key発行、Authentication、Rate Limit、使用量計測、課金等の確認後に、正式なAPI Documentを公開します。
 
 ---
 
-## 8. 認証連携
+## 8. 認証
 
-GoogleやGitHubなどのLogin Providerは、本人確認の入口として利用します。
+Login、Account登録、Email確認、Password再設定、Passkey、二段階認証等のRoute・画面構成があります。
 
-ProviderのPasswordをAsteraへ渡すものではありません。
+GoogleやGitHub等のProvider PasswordをAsteraが取得・流用しない方針です。
 
-Astera Accountでは、必要に応じて次を管理します。
+現在の公開実績に含めないもの：
 
-- Astera用Password
-- Passkey
+- Provider OAuth実接続
+- Session発行
+- Email送信
+- Passkey登録・Login
 - 二段階認証
 - Backup Code
-- 接続Provider
-- Session
+- Account Recovery
 
 ---
 
-## 9. 決済連携
+## 9. Plan・Credit・決済
 
-PlanやCredit購入では、決済画面とAstera Accountの状態を連携します。
+Plan、Credit、Checkout、Billing StatusのRoute・画面構成があります。
 
-決済画面で支払いが完了したことと、Astera側へ反映されたことを分けて確認します。
+設計上のFlow：
 
 ```text
 購入内容確認
@@ -194,29 +197,52 @@ Billing Status確認
 PlanまたはCredit反映
 ```
 
+現在の公開実績に含めないもの：
+
+- 外部決済画面への実接続
+- Webhook
+- 署名検証
+- Plan反映
+- Credit Ledger反映
+- 重複防止
+- 返金・補填
+- 枯渇停止・復帰
+
 ---
 
-## 10. System StatusとSupport
+## 10. Fail-Closed
 
-実行できない場合は、入力内容だけでなく、Account、Credit、接続先、System Statusを確認します。
+Frontend Sourceでは、API未設定、Endpoint Error、Schema不整合等の状態を、Mock成功や仮Dataで隠さない方針です。
 
-Supportへ連絡するときは、次を伝えると確認しやすくなります。
+連携できていない場合は、成功したように表示せず、Errorとして扱います。
 
-- 発生日時
-- 利用端末とBrowser
-- 画面名
-- 操作内容
-- 表示されたError
-- Result IDやProject ID
-- 再現するか
+この方針により、「画面があるから機能が動いている」という誤認を避けます。
 
-Password、Backup Code、API Key、決済情報は送らないでください。
+---
+
+## 現在公開できる連携情報
+
+- 各連携の目的とArchitecture
+- Route・Frontend境界のSource実装
+- 主役AIへResultをCopyして使うFlow
+- File MetadataのFrontend処理
+- API未接続時に安全停止する方針
+
+現在、接続済みとは説明しないもの：
+
+- File内容解析
+- Storage
+- Share
+- 認証
+- 決済
+- Credit
+- Developer API
 
 ---
 
 ## 関連Document
 
-- [Astera App完全ガイド](app-guide.md)
-- [Astera AppとAstera v8](app-and-runtime.md)
-- [Workspace・結果管理](workspace-and-results.md)
+- [現在の公開状態](current-status.md)
+- [Astera App Guide](app-guide.md)
+- [Workspace・Result管理](workspace-and-results.md)
 - [Account・Security・Plan・Credit](account-security-and-billing.md)
