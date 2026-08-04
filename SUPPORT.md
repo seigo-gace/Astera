@@ -1,136 +1,36 @@
 # Support
 
-Asteraに関する質問、公開情報の誤り、不具合、Account、Plan、Credit、Security、取材・提携などは、内容に合う窓口からお知らせください。
+現在のPublic Repositoryに関する質問、Documentationの誤り、公開Sample、Source実装説明、Security報告、取材・提携等は、内容に合う窓口からお知らせください。
 
-このPageでは、**GitHub Issueへ書いてよい内容**と、**個別のSupport窓口へ送る内容**を分けて説明します。
+Astera AppのProduction利用、Account、決済、Developer API、Native Appは、現在利用可能な機能として案内していません。
+
+最新の公開判定は[現在の公開状態](docs/current-status.md)を確認してください。
 
 ---
 
 ## GitHub Issuesを使う内容
 
-このRepositoryのIssuesでは、公開情報と公開環境に関する次の内容を受け付けています。
+このRepositoryのIssueでは、現在公開している範囲に関する次の内容を扱います。
 
 - Documentationの誤り
+- 現在の公開状態との食い違い
 - 説明が分かりにくい箇所
 - Link切れ
-- 誤字、表記ゆれ
+- 誤字・表記ゆれ
 - 公開Sampleの改善
-- 公開環境で確認できる一般的な不具合
-- Web、Smartphone、Tabletでの表示問題
-- Accessibilityの改善案
-- Astera Appの使い方に関する提案
+- 8つの判断材料に関する質問
+- Astera AppのSource実装説明に関する質問
+- 43 Route Patternの説明に関する指摘
+- Accessibility・Responsive設計への提案
 - FAQへ追加してほしい質問
 
 Issueを作成する前に、同じ内容がすでに報告されていないか確認してください。
 
 ---
 
-## 公式Support窓口を使う内容
+## GitHub Issueへ書かない内容
 
-次の内容は、公開Issueへ書かず、[Astera公式Site](https://asterav8.jp)の問い合わせ窓口を利用してください。
-
-- Loginできない
-- Email確認
-- Password再設定
-- Passkey
-- 二段階認証
-- Backup Code
-- Account停止・退会
-- Plan・Subscription
-- Credit購入・残高・補填
-- Checkout・Billing Status
-- 決済の反映
-- 個人情報
-- 契約情報
-- 非公開Project
-- Private Share
-- API Key
-- Developer APIの個別利用
-- 取材、掲載、支援、提携、事業相談
-
----
-
-## Astera App内で最初に確認する場所
-
-Supportへ連絡する前に、問題の種類に応じて次を確認します。
-
-### 実行できない
-
-- 入力が空ではないか
-- Account状態
-- Plan
-- Credit残高
-- System Status
-- Network接続
-
-### Resultが表示されない
-
-- 実行が完了しているか
-- Error Message
-- HistoryまたはResult詳細
-- 再読み込み後も同じか
-
-### Loginできない
-
-- Email確認
-- Password再設定
-- 二段階認証
-- Backup Code
-- 外部Login後のAstera用Password設定
-
-### 決済後に反映されない
-
-- Billing Status
-- Accountの対象
-- 反映待ち表示
-- 再読み込み後のCredit・Plan
-
-### Shareを止めたい
-
-- Share管理
-- Public／Privateの種類
-- 対象Result
-- 有効期限
-
----
-
-## 不具合を伝えるときに役立つ情報
-
-次を分かる範囲で書いてください。
-
-- 発生日時
-- 何をしようとしたか
-- どの画面で起きたか
-- 期待していた結果
-- 実際に起きたこと
-- 再現手順
-- 毎回起きるか
-- 表示されたError Message
-- 利用端末
-- OS
-- BrowserとVersion
-- 画面向き
-- 画面分割の有無
-- Network環境
-- Result ID、Project ID、Share IDなど、公開して問題ない識別情報
-
-### Mobile／Tabletの表示問題
-
-次もあると確認しやすくなります。
-
-- 端末の種類
-- 縦向き・横向き
-- Browser AppまたはNative App
-- Keyboard表示中か
-- 画面が左右へ動くか
-- Buttonが押せないか
-- Scrollできない場所
-
----
-
-## 書かない情報
-
-公開Issueへ次を書かないでください。
+次の内容は、公開Issueへ書かないでください。
 
 - Password
 - Passkey情報
@@ -140,13 +40,61 @@ Supportへ連絡する前に、問題の種類に応じて次を確認します�
 - Access Token
 - Cookie
 - 決済Card情報
-- 住所、電話番号、Emailなどの個人情報
+- 住所、電話番号、Email等の個人情報
 - 顧客情報
 - 契約書の全文
 - 非公開URL
-- Private Projectの内容
+- Private Repositoryの内容
+- 未公開Projectの内容
 
-必要なScreenshotを添付する場合は、個人情報や秘密情報を伏せてください。
+現在、本番Account、決済、Credit、Share、Developer API等は公開利用可能とは案内していません。
+
+それらに関する設計上のSecurity問題を発見した場合も、詳細をPublic Issueへ書かず[Security Policy](SECURITY.md)に従ってください。
+
+---
+
+## 公式問い合わせ窓口を使う内容
+
+次は[Astera公式Site](https://asterav8.jp)の問い合わせ窓口を利用してください。
+
+- 取材
+- 掲載
+- 支援
+- 提携
+- 事業相談
+- 非公開情報を含む連絡
+- Security問題の連絡先確認
+- GitHub上へ公開できない内容
+
+---
+
+## 不具合報告について
+
+現在のPublic Repositoryで扱う不具合報告は、主に次です。
+
+- Markdown Link切れ
+- Documentationの誤記
+- Sampleの不足・矛盾
+- Source実装状態と公開説明の不一致
+- GitHub ActionsのDocumentation Check
+- Repository Navigation
+
+Production App、実Account、実決済、Android／iOS Store版等の利用者向けTroubleshootingは、各機能の公開確認後に追加します。
+
+---
+
+## 報告するときに役立つ情報
+
+- 対象DocumentまたはFile
+- 該当Section
+- 現在の記述
+- 問題だと考える理由
+- 期待する記述または状態
+- 関連するPublic Source
+- 再現手順
+- Error Message
+
+非公開情報を含めないでください。
 
 ---
 
@@ -158,10 +106,10 @@ Documentationの誤りは、IssueまたはPull Requestで提案できます。
 
 - 初めて読む人には分からない表現
 - 専門用語の説明不足
-- Astera Appの画面と説明の食い違い
+- Source実装と説明の食い違い
+- 公開済み・Source実装済み・接続確認前の区分ミス
 - PCだけを前提にした説明
 - Link切れ
-- 古い料金・機能案内
 - 公開Sampleの不足
 
 Contribution方法は[CONTRIBUTING.md](CONTRIBUTING.md)をご覧ください。
@@ -170,20 +118,13 @@ Contribution方法は[CONTRIBUTING.md](CONTRIBUTING.md)をご覧ください。
 
 ## Securityに関する報告
 
-認証、Account、個人情報、Share、決済、API、権限などのSecurity問題は、公開Issueへ詳しい再現手順を書かず、[Security Policy](SECURITY.md)に沿って報告してください。
+認証、Account、個人情報、Share、決済、API、権限等のSecurity問題は、公開Issueへ詳しい再現手順を書かず、[Security Policy](SECURITY.md)に沿って報告してください。
 
 ---
 
-## 問い合わせ後
+## 関連Document
 
-報告内容によって、次の確認を行います。
-
-- 再現できるか
-- 特定端末だけか
-- Account固有か
-- 公開環境全体か
-- Documentationの問題か
-- System側の問題か
-- Security上の影響があるか
-
-公開できる修正や案内は、Documentation、CHANGELOG、Release情報へ反映します。
+- [現在の公開状態](docs/current-status.md)
+- [FAQ](docs/faq.md)
+- [Security Policy](SECURITY.md)
+- [Contributing](CONTRIBUTING.md)
