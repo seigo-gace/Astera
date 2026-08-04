@@ -6,9 +6,31 @@ Asteraは、質問・相談・資料・計画・AIの回答を、**人が判断�
 
 すぐに答えを作るのではなく、最初に「本当に達成したいこと」「足りない前提」「確認できる事実」「失敗した場合の危険」「反対側から見た問題」「比較できる別案」を整理します。
 
-その上で、利用者自身が判断するか、ChatGPT、Claude、Gemini、自作AIなどの主役AIへ渡して、説明・計画・文章・コードなどの最終成果物へ仕上げます。
+その上で、利用者自身が判断するか、ChatGPT、Claude、Gemini、自作AIなどの主役AIへ渡して、説明・計画・文章・Codeなどの最終成果物へ仕上げます。
 
-[公式サイト](https://asterav8.jp) ｜ [Astera App](https://app.asterav8.jp) ｜ [はじめかた](docs/getting-started.md) ｜ [Astera App完全ガイド](docs/app-guide.md) ｜ [公開サンプル](examples/README.md)
+[現在の公開状態](docs/current-status.md) ｜ [Documentation](docs/README.md) ｜ [公開Sample](examples/README.md) ｜ [公式Site](https://asterav8.jp)
+
+---
+
+## 現在このRepositoryで公開している範囲
+
+このPublic Repositoryは、**Asteraの構想だけを置いた予告Pageではありません**。
+
+現在完成している説明、処理構造、App Sourceの実装範囲、公開Sample、Support・Security情報を、外部から確認できる形で公開しています。
+
+| 領域 | 現在の公開状態 |
+|---|---|
+| Asteraの目的と役割 | 公開済み |
+| 8つの判断材料 | 公開済み |
+| Astera v8の処理構造 | 公開説明済み |
+| Use Caseと入出力Sample | 公開済み |
+| Appの43 Route PatternとFrontend Source構成 | Source実装範囲として公開説明済み |
+| Documentation、Support、Security、Contribution情報 | 公開済み |
+| Production Web、Backend、Account、決済、Native実機 | 確認完了まで利用可能機能としては案内しない |
+
+仕様があること、Sourceへ実装されていること、Productionで利用できることは同じではありません。
+
+詳細は[現在の公開状態](docs/current-status.md)にまとめています。
 
 ---
 
@@ -18,7 +40,7 @@ Asteraは、質問・相談・資料・計画・AIの回答を、**人が判断�
 
 たとえば、次の相談があるとします。
 
-> 新しいサービスを来月までに公開したい。すぐ作り始めるべきか？
+> 新しいServiceを来月までに公開したい。すぐ作り始めるべきか？
 
 一般的な回答は、開発手順やおすすめの進め方から始まりがちです。
 
@@ -61,7 +83,7 @@ Asteraは、一つの結論を押しつけるものではありません。
 利用者
   ↓
 Astera App
-入力・目的選択・資料・Project・History・結果管理
+入力・目的選択・Result表示・Workspace操作
   ↓
 Astera v8
 問いを分解し、複数の視点と案を比較する
@@ -74,24 +96,28 @@ Astera v8
 
 ### Astera App
 
-Astera Appは、Asteraを日常的に利用するための操作画面です。
+Astera Appは、Asteraを利用するためのFrontendです。
 
-主な機能は次のとおりです。
+現在のSource実装には、次が含まれます。
 
-- **新しい実行**：質問、相談、資料、AI回答などを入力する
-- **目的選択**：自動、レビュー、比較、検証、改善、調査、計画、検討、判断、原因分析から選ぶ
-- **資料と情報源**：FileやProjectに関連する情報を実行へ加える
-- **Template**：レビュー、比較、計画、Risk確認などの入力補助を使う
-- **結果表示**：8つの判断材料を決まった順番で読む
-- **Turn管理**：一つの作業内で複数回の実行を移動して確認する
-- **コピー・保存・共有**：項目単位または結果全体を再利用する
-- **Project**：同じ目的の作業、資料、結果をまとめる
-- **History**：過去の実行や結果を探し、再利用する
-- **Settings**：表示、言語、Option、Template、Storage、Privacy、通知を管理する
-- **Account**：Profile、Security、Plan、Credit、支払い状況を確認する
-- **Developer Mode**：Asteraを外部Applicationや業務へ接続するための管理画面
+- 新しい実行画面
+- 自動、Review、比較、検証、改善、調査、計画、検討、判断、原因分析の目的選択
+- Templateと追加Optionの選択UI
+- 処理段階の表示
+- 8つの判断材料へのResult Mapping
+- Turn移動
+- Section単位とResult全体のCopy
+- Markdown Download
+- 端末共有
+- Project、History、Settings、Account、Security、Plan、Credit、Developer、Share、Legal、Status、Supportを含む43 Route Pattern
+- Desktop、Smartphone、Tablet向けResponsive Shell
+- Android／iOS Native Shell用の設定とWorkflow
 
-詳しい画面構成と操作は[Astera App完全ガイド](docs/app-guide.md)をご覧ください。
+ただし、Routeや画面がSourceへ存在することを、Backend・認証・決済・Storage・実機を含む本番稼働済みとは表記しません。
+
+File機能も、現在のFrontend Sourceでは名称・Size・TypeなどのMetadataをPayloadへ含める段階であり、File本体のUploadと内容解析は現在の公開実績に含めません。
+
+詳しくは[Astera App Guide](docs/app-guide.md)と[現在の公開状態](docs/current-status.md)をご覧ください。
 
 ### Astera v8
 
@@ -112,36 +138,36 @@ Astera v8は、自由に文章を作る生成AIそのものではありません
 
 ---
 
-## Astera Appでの基本的な流れ
+## 現在のApp Sourceで確認できる基本Flow
 
-1. **新しい実行を開く**
-2. 質問、相談、資料の説明、確認したいAI回答などを入力する
-3. 必要に応じて目的、File、Project情報、Template、Optionを追加する
-4. 実行する
-5. 8つの判断材料を読む
-6. 不足情報を追加入力して、もう一度実行する
-7. 結果をProjectやHistoryへ残す
-8. 必要な項目をコピー、Download、共有する
-9. 最終成果物が必要な場合は「主役AIへの再指示」を利用する
+1. 新しい実行画面で内容を入力する
+2. 必要に応じて目的、Template、Optionを選択する
+3. Frontendから実行Payloadを作る
+4. 処理段階を表示する
+5. Responseを8つの判断材料へ割り当てる
+6. Turnを移動する
+7. ResultのSectionまたは全体をCopyする
+8. Markdownとして保存する
+9. 端末の共有機能へ渡す
 
-入力の書き方と画面操作は[はじめかた](docs/getting-started.md)、結果の読み方と管理は[Workspace・結果管理](docs/workspace-and-results.md)にまとめています。
+Backend EndpointとResponse Schemaを含むProduction動作は、実接続確認が終わるまで現在利用可能とは案内しません。
 
 ---
 
-## どんな場面で使えるのか
+## どんな場面で使うのか
 
 Asteraは、正解をすぐに決めにくい場面ほど役立ちます。
 
 ### 日常の判断
 
-- 商品、サービス、住居、旅行先を比較する
+- 商品、Service、住居、旅行先を比較する
 - 転職、進路、独立などの選択肢を考える
 - 人間関係で、事実と自分の推測を分ける
 - 家族へ説明するために、自分の考えを整理する
 
 ### 仕事・事業
 
-- 企画、事業計画、提案書をレビューする
+- 企画、事業計画、提案書をReviewする
 - 契約や発注条件の確認項目を整理する
 - 新規公開、料金変更、業務変更の危険を確認する
 - 複数部署・複数人の意見を同じ条件で比較する
@@ -160,43 +186,7 @@ Asteraは、正解をすぐに決めにくい場面ほど役立ちます。
 - 反対意見や重大Riskが抜けていないか確認する
 - より良い再質問・再指示を作る
 
-詳しい例は[活用例](docs/use-cases.md)と[公開サンプル](examples/README.md)をご覧ください。
-
----
-
-## Web・スマートフォン・Tablet
-
-Astera Appは、同じ操作と情報をWeb Browser、スマートフォン、Tabletで扱える共通Applicationとして設計されています。
-
-- PCではSidebarと広い結果表示を使う
-- スマートフォンではHeaderとDrawerで画面を広く使う
-- Tabletでは画面幅と向きに応じて配置を変える
-- 縦向き・横向き、画面分割、Window Size変更へ追従する
-- Touch操作では押しやすいButton Sizeと、入力中のKeyboard表示を考慮する
-- Light／Dark、表示言語、動きを抑える設定を扱う
-
-端末での考え方は[Mobile・Tablet・Accessibility](docs/mobile-and-accessibility.md)をご覧ください。
-
----
-
-## Account・Security・Plan・Credit
-
-Astera Appでは、実行画面だけでなく、継続利用に必要なAccount機能を一つの画面体系で扱います。
-
-- Email登録とLogin
-- Password再設定
-- Google／GitHub Login後のAstera用Password設定
-- Passkey
-- 二段階認証
-- Backup Code
-- Login状態と接続Accountの確認
-- PlanとSubscription
-- Credit残高、購入、利用履歴
-- 支払い処理後の状態確認
-- Credit低下・停止に関する通知
-- DataとPrivacyの設定
-
-詳しくは[Account・Security・Plan・Credit](docs/account-security-and-billing.md)をご覧ください。
+詳しい例は[活用例](docs/use-cases.md)と[公開Sample](examples/README.md)をご覧ください。
 
 ---
 
@@ -204,15 +194,17 @@ Astera Appでは、実行画面だけでなく、継続利用に必要なAccount
 
 | Document | 内容 |
 |---|---|
-| [はじめかた](docs/getting-started.md) | 初回利用から結果の再利用まで |
-| [Astera App完全ガイド](docs/app-guide.md) | 画面、機能、Navigation、操作 |
+| [現在の公開状態](docs/current-status.md) | 公開済み、Source実装、実稼働未確認の区分 |
+| [Documentation案内](docs/README.md) | 目的別の読み順 |
+| [Asteraのはじめかた](docs/getting-started.md) | 現在のSourceに沿った操作Flow |
+| [Astera App Guide](docs/app-guide.md) | 画面、機能、Navigation、現在の接続状態 |
 | [Astera AppとAstera v8](docs/app-and-runtime.md) | App・Runtime・主役AIの役割分担 |
 | [Asteraの仕組み](docs/how-it-works.md) | 入力から8つの判断材料までの工程 |
-| [Workspace・結果管理](docs/workspace-and-results.md) | Project、History、Turn、結果、共有 |
-| [Account・Security・Plan・Credit](docs/account-security-and-billing.md) | Login、Security、契約、Credit |
-| [Mobile・Tablet・Accessibility](docs/mobile-and-accessibility.md) | 端末、画面向き、操作性 |
+| [Workspace・結果管理](docs/workspace-and-results.md) | Project、History、Turn、Result、Shareの設計 |
+| [Account・Security・Plan・Credit](docs/account-security-and-billing.md) | Account関連画面と現在の実装状態 |
+| [Mobile・Tablet・Accessibility](docs/mobile-and-accessibility.md) | Source対応と実機確認状態 |
 | [活用例](docs/use-cases.md) | 日常、仕事、事業、開発での使い方 |
-| [連携の考え方](docs/integrations.md) | 主役AI、外部Storage、APIとの関係 |
+| [連携の考え方](docs/integrations.md) | 主役AI、File、Storage、APIとの関係 |
 | [よくある質問](docs/faq.md) | AsteraとAppに関するFAQ |
 | [Press Kit](docs/press-kit.md) | 紹介・記事・資料向けの基本情報 |
 
@@ -232,9 +224,10 @@ Asteraは、**Seigo (`seigo-gace`) が個人で構想・設計・開発してい
 
 It organizes the real objective, missing assumptions, known and unknown facts, risks, opposing views, comparable options, a recommended decision, and a refined instruction for a primary AI.
 
-Astera consists of two main products:
+This public repository currently publishes the product concept, the eight-part decision structure, architecture documentation, public examples, and the verified scope of the Astera App frontend source.
 
-- **Astera App** — the user-facing workspace for input, projects, history, results, sharing, account, security, plans, credits, and developer access
-- **Astera v8** — the deterministic runtime that analyzes and structures decision material
+Frontend routes or screens are not presented as production-ready services until backend, authentication, billing, storage, deployment, and device verification are complete.
 
-Website: [asterav8.jp](https://asterav8.jp)
+- [Current public status](docs/current-status.md)
+- [Documentation](docs/README.md)
+- [Public examples](examples/README.md)
