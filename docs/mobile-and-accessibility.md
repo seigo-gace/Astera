@@ -1,245 +1,274 @@
 # Mobile・Tablet・Accessibility
 
-Astera Appは、PCだけを前提にしたApplicationではありません。
+このDocumentは、Astera App Sourceに実装されているResponsive・端末対応と、現在の実機確認状態を説明します。
 
-同じ情報と操作を、Web Browser、Android、iPhone、iPad、Android Tablet、画面分割やWindow Size変更でも扱えるように設計されています。
+Sourceに対応Codeや設定があることと、すべての端末で動作確認済みであることは同じではありません。
 
-このDocumentでは、端末ごとの見え方と、操作しやすさの考え方を説明します。
+最新の公開判定は[現在の公開状態](current-status.md)を確認してください。
 
 ---
 
-## 1. 共通の考え方
+## 現在の状態
 
-端末ごとに別のAsteraを作るのではなく、同じFrontendを画面幅、向き、入力方法に合わせて変化させます。
+| 対象 | Source状態 | 公開上の扱い |
+|---|---|---|
+| Desktop Browser | Responsive Shell実装 | Production Browser確認前 |
+| Smartphone Web | Header、Drawer、Safe Area、Keyboard対策 | 実端末Browser確認前 |
+| Tablet Web | 幅、向き、Pointer、Resize対応 | 実Tablet確認前 |
+| Android | Capacitor設定・Workflowあり | APK／AAB実Build・実機未確認 |
+| iOS／iPadOS | Universal設定・Workflowあり | Simulator・実機未確認 |
+| Foldable・Multi-window | Resize対応Sourceあり | 実機未確認 |
+| Accessibility | Focus、Reduced Motion、Touch等の方針・Sourceあり | 総合実機検証前 |
+
+---
+
+## 1. 共通Frontend
+
+Astera Appは、端末ごとに別のUI Sourceを複製せず、共通Frontendを画面幅、向き、入力方法に合わせて変化させる構成です。
 
 ```text
 共通Frontend
 ├─ Desktop Browser
 ├─ Smartphone Browser
-├─ Android App
-├─ iPhone App
-├─ Android Tablet
-└─ iPad
+├─ Tablet Browser
+├─ Android Native Shell
+└─ iOS／iPadOS Native Shell
 ```
 
-入力、Project、History、Result、Settings、Accountの内容は共通です。
+このArchitectureとResponsive Sourceは実装されています。
+
+各配信経路でのProduction動作は別の確認対象です。
 
 ---
 
-## 2. PC
+## 2. Responsive境界
 
-PCでは、広い画面を使って次を同時に確認しやすくします。
+Sourceでは主に次の画面幅を基準にします。
+
+```text
+Desktop : 1101px以上
+Tablet  : 761〜1100px
+Mobile  : 760px以下
+Compact : 420px以下
+Small   : 360px以下
+```
+
+固定Breakpointだけでなく、Visual Viewport、Pointer、Hover、Orientation、Window Resizeを扱う構成です。
+
+---
+
+## 3. Desktop
+
+Desktop向けSourceには次が含まれます。
 
 - Sidebar Navigation
-- 実行履歴
-- 入力欄
-- 8つの判断材料
-- Turn移動
-- ProjectとHistory
+- 広い入力・Result領域
+- Turn Rail
+- Project・HistoryへのNavigation
+- Window幅変更への追従
 
-長い結果を読みながら、別のTurnへ移動したり、必要な項目をコピーしたりする使い方に向いています。
-
----
-
-## 3. スマートフォン
-
-スマートフォンでは、常にSidebarを表示すると入力と結果が狭くなるため、HeaderとDrawerを使います。
-
-主な特徴：
-
-- 画面上部からMenuを開く
-- 入力欄と結果を画面幅いっぱいに使う
-- Turn数を小さな表示で確認する
-- 必須操作はHoverなしで表示する
-- 実行Buttonを明確に分ける
-- Keyboard表示中も入力欄とButtonを確認できるようにする
-- Safe Areaへ対応する
-
-### 縦向き
-
-入力と結果を上から下へ読む形です。
-
-### 横向き
-
-高さが小さくなるため、Header、Dialog、入力欄が画面を埋め尽くさないように調整します。
-
-横向きになっても、操作を隠したり、横Scrollを前提にしたりしません。
+Production Browserでの表示確認は現在の公開実績に含めません。
 
 ---
 
-## 4. Tablet
+## 4. Smartphone Web
 
-Tabletでは、スマートフォンより広い画面を使いながら、Touch操作を前提にします。
+Smartphone向けSourceには次が含まれます。
 
-- 画面幅に応じてSidebarまたはDrawerを使う
-- 縦向き・横向きの両方へ追従する
-- iPadのSplit ViewやWindow Size変更を考慮する
-- Android TabletやFoldableのResizeへ追従する
-- Mouse、Trackpad、Touchのどれでも必須操作を使えるようにする
+- 固定Header
+- Drawer Navigation
+- 画面幅いっぱいの入力・Result
+- Safe Area
+- Software Keyboardを考慮した高さ調整
+- Touch Target
+- Hoverなしでも使える必須操作
+- 横向き低Height対応
 
-Tablet専用の別画面へ切り替えるのではなく、利用可能な幅に合わせて配置を変えます。
+これらはSource実装範囲です。
 
----
-
-## 5. 画面向きが変わったとき
-
-縦向きから横向き、横向きから縦向きへ変わった場合でも、次の状態を維持します。
-
-- 入力中の文章
-- 選択した目的
-- 追加したFile
-- 開いているResult
-- 現在のTurn
-- Dialogの内容
-
-画面向きが変わるたびに、最初の画面へ戻したり、入力を消したりしないことを重視します。
+実Android Browser、実iPhone Browserでの確認は未完了です。
 
 ---
 
-## 6. 画面分割・Window Size変更
+## 5. Tablet
 
-Tablet、Foldable、Desktopでは、利用中に画面幅が変わる場合があります。
+Tablet向けSourceには次が含まれます。
 
-Astera Appは、特定の機種名で判断するのではなく、現在利用できる画面幅、高さ、Pointer、Touch、向きを見て配置を変えます。
+- 幅に応じたSidebar／Drawer
+- 縦向き・横向き
+- Window Resize
+- Pointer、Mouse、Trackpad、Touch
+- iPad Split View相当の幅変化
+- Android Tablet／Foldable／Multi-window相当のResize
 
-これにより、次のような使い方を想定します。
-
-- iPadで別資料と並べて使う
-- Android Tabletで2つのApplicationを並べる
-- Foldableを開閉する
-- Desktop BrowserのWindow幅を変える
-- 外部Displayへ移動する
+実Tabletでの操作確認は現在の公開実績に含めません。
 
 ---
 
-## 7. 横Scrollを発生させない
+## 6. OrientationとWindow Size変更
 
-通常操作で画面が左右へぶれたり、不要な横Scrollが発生したりすると、入力と結果が読みにくくなります。
+Sourceでは、画面の向きやSizeが変わった場合に、入力・選択・Result等の状態を維持することを前提にしています。
 
-そのため、次を前提にします。
+確認対象：
 
-- 長い文字列を画面内で折り返す
-- ButtonやCardを固定幅にしすぎない
-- Tableは内容に応じて表示方法を変える
-- Dialogを画面外へはみ出させない
-- Safe Areaを含めて幅を計算する
-- Sidebarを開いたときに本文を不自然に押し出さない
+- 縦向きから横向き
+- 横向きから縦向き
+- Browser Window Resize
+- Tablet画面分割
+- Foldable開閉
+- Software Keyboard表示・非表示
 
-Code、URL、識別子など、長い一続きの文字列は、コピー可能な状態を保ちながら折り返します。
+状態維持の実端末検証は未完了です。
+
+---
+
+## 7. Horizontal Overflow
+
+Sourceでは、通常操作で不要な横Scrollを発生させない方針です。
+
+- 長いTextの折り返し
+- Button・Cardの可変幅
+- Dialogの画面内配置
+- Safe Areaを含む幅計算
+- Code・URL・識別子の折り返しとCopy
+- Sidebar／Drawer開閉時のLayout維持
+
+実Browser Matrixでの総合確認は未完了です。
 
 ---
 
 ## 8. Touch操作
 
-Touch端末では、Mouseより正確に小さな場所を押しにくいため、次を重視します。
+Touch対応Sourceでは次を重視します。
 
-- ButtonやLinkを押しやすい大きさにする
-- Button同士を近づけすぎない
-- Hoverしないと出ない必須操作を作らない
-- Swipeだけを唯一の操作にしない
-- File削除やShare停止などの重要操作を誤って押しにくくする
-- Scroll中に入力やButtonが勝手に反応しないようにする
+- 44〜48px以上を目安にしたTouch Target
+- Button間隔
+- Hover依存を避ける
+- Swipe以外の操作手段を残す
+- Delete・Share停止等の誤操作防止
+- Scroll中の誤反応防止
+
+実端末でのTouch精度・操作性確認は未完了です。
 
 ---
 
-## 9. Keyboardと入力
+## 9. Keyboardと日本語入力
 
-スマートフォンでは、Software Keyboardが表示されると、利用できる画面の高さが大きく変わります。
+Sourceでは次を考慮します。
 
-Astera Appでは、次を考慮します。
-
-- 入力欄がKeyboardの下へ隠れない
+- 入力欄をSoftware Keyboardの下へ隠さない
 - 実行Buttonへ到達できる
-- Dialog内の入力もScrollできる
-- 日本語入力の変換中に誤送信しない
-- 改行と実行を明確に分ける
-- 入力文字が小さすぎてBrowser Zoomが起きないようにする
+- Dialog内入力のScroll
+- 日本語IME変換中の誤送信防止
+- 改行と実行の分離
+- Mobile Browserの意図しないZoom防止
 
-PCではKeyboard Shortcutを使える場合がありますが、スマートフォンでは画面上の実行Buttonを基本にします。
+実端末と各IMEでの確認は未完了です。
 
 ---
 
-## 10. Light・Dark・System連動
+## 10. Theme・Reduced Motion
 
-表示Themeは、利用環境に合わせて選べます。
+Sourceには次の表示設定があります。
 
 - Light
 - Dark
-- 端末設定へ連動
+- System連動
+- Reduced Motion
 
-Themeを変えても、文字、Button、選択状態、Error、警告が見分けられることを重視します。
+状態を色だけで伝えず、TextやIconを併用する方針です。
 
-色だけで状態を伝えず、TextやIconも併用します。
-
----
-
-## 11. 動きを抑える設定
-
-Animationが負担になる利用者向けに、動きを抑える設定を扱います。
-
-- Scroll Animationを短縮または停止する
-- Processing表示の動きを抑える
-- DialogやMenuのTransitionを抑える
-- 端末のReduced Motion設定へ連動する
+実画面でのContrast・視認性・Animation抑制確認は未完了です。
 
 ---
 
-## 12. 文字と読みやすさ
+## 11. Keyboard・Screen Reader
 
-- 入力文字を小さくしすぎない
-- 長い結果を見出しで分ける
-- 8項目の番号とTitleを固定する
-- Error理由をCodeだけで終わらせない
-- 専門用語へ説明を加える
-- Button名をIconだけに依存しない
+Web Sourceでは次を目標にしています。
 
-結果は、見た目の装飾よりも、順番と意味が分かることを優先します。
-
----
-
-## 13. Keyboard・Screen Reader
-
-Web Browserでは、Keyboardだけでも主要操作へ移動できることを目指します。
-
-- Focus位置が分かる
-- Dialogを開いた後、操作対象へFocusが移る
-- Dialogを閉じると元の場所へ戻る
+- Keyboardだけで主要操作へ移動する
+- Focus位置を表示する
+- Dialogを開いた後に適切な対象へFocusする
+- Dialogを閉じた後に元の位置へ戻す
 - Button、Link、入力欄へ意味のある名前を付ける
-- Processingや完了を状態として伝える
+- Processing・完了状態を伝える
 - 見出し順を保つ
 
----
-
-## 14. 古いBrowser・WebView
-
-必要な機能が使えないBrowserや古いWebViewでは、画面が壊れたまま続行させず、更新や別の利用方法を案内します。
-
-一部の見た目機能に対応していない場合でも、入力、Navigation、Result確認などの基本操作を優先します。
+Screen Reader、VoiceOver、TalkBack等の実機・実Browser総合確認は未完了です。
 
 ---
 
-## 15. 端末を変えたとき
+## 12. 古いBrowser・WebView
 
-Accountへ保存される情報と、端末内だけに保存される設定があります。
+Sourceには、必要なWeb機能を確認し、非対応環境で壊れた画面を続行させないためのCompatibility処理があります。
 
-端末を変えた場合は、次を確認します。
+含まれる方針：
 
-- Login
-- Passkey
-- 二段階認証
-- 表示言語
-- Theme
-- Share状態
-- Download済みFile
-- 外部Storage接続
+- 必須Web機能の検査
+- `randomUUID`等のFallback
+- 古いWebViewへの更新案内
+- `color-mix()`非対応Fallback
+- `backdrop-filter`非対応Fallback
 
-Passkeyは登録した端末や同期環境によって利用可否が異なるため、別のLogin方法も確保します。
+実古Version端末の確認は未完了です。
+
+---
+
+## 13. Android
+
+Android向けにはCapacitor Native Shell、Phone／Tablet／Foldable／Multi-windowを想定した設定とWorkflowがあります。
+
+現在の公開実績には次を含めません。
+
+- APK実Build成功
+- AAB実Build成功
+- Android実機動作
+- App Link
+- Native共有
+- Keyboard Resize
+- Back操作
+- Google Play公開
+
+---
+
+## 14. iOS・iPadOS
+
+iPhone／iPad Universal、Orientation、Split View等を想定したCapacitor設定とWorkflowがあります。
+
+現在の公開実績には次を含めません。
+
+- Simulator Build成功
+- iPhone実機動作
+- iPad実機動作
+- Universal Link
+- Native共有
+- TestFlight
+- App Store公開
+
+---
+
+## 現在公開できる説明
+
+現在、外部へ正しく説明できる内容：
+
+- 共通Frontend SourceでDesktop、Smartphone、Tabletへ対応する構成
+- Responsive Shell、Drawer、Safe Area、Visual Viewport、Touch等のSource実装
+- Android／iOS Native Shell用の設定とWorkflow
+- 古いBrowserや非対応機能で安全停止する方針
+
+現在、動作確認済みとは説明しない内容：
+
+- 実Smartphone・Tabletでの操作
+- Android／iOS Build
+- Native実機
+- Store公開
+- Screen Readerを含む総合Accessibility適合
 
 ---
 
 ## 関連Document
 
-- [Astera App完全ガイド](app-guide.md)
-- [はじめかた](getting-started.md)
-- [Workspace・結果管理](workspace-and-results.md)
-- [Account・Security・Plan・Credit](account-security-and-billing.md)
+- [現在の公開状態](current-status.md)
+- [Astera App Guide](app-guide.md)
+- [App画面一覧](app-screen-map.md)
+- [操作Flow](getting-started.md)
