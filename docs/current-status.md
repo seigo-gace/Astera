@@ -1,121 +1,131 @@
 # Astera 現在の公開状態
 
-最終更新：2026-08-04
+最終更新：2026-08-05
 
-このページは、Asteraについて**現在公開できる状態まで到達している範囲**を示す正本です。
-
-Asteraでは、次の3つを同じ意味として扱いません。
-
-1. 仕様・設計が決まっている
-2. Sourceへ実装されている
-3. 公開環境で実際に利用できることを確認している
-
-このPublic Repositoryで公開実績として扱うのは、以下の範囲です。
+このページでは、Asteraについて**現在確認できるもの、準備中のもの、まだ利用できないもの**をまとめています。
 
 ---
 
 ## 現在公開しているもの
 
-| 領域 | 現在の状態 | このRepositoryで確認できるもの |
-|---|---|---|
-| Asteraの目的 | 公開済み | 判断材料生成レイヤーとしての役割、生成AIとの違い |
-| 8つの判断材料 | 公開済み | 本当の目的、前提不足、事実確認、危機察知、反対視点、比較案、推奨判断、主役AIへの再指示 |
-| Astera v8の処理構造 | 公開説明済み | 入力を分解・比較・構造化する考え方と処理順 |
-| 活用方法 | 公開済み | 日常、事業、開発、AI回答確認などのUse Case |
-| 入出力例 | 公開済み | 具体的な入力と8項目のOutput Sample |
-| Public Documentation | 公開済み | README、仕組み、App構成、Security、Support、FAQなど |
-| Documentation検査 | Repositoryへ実装済み | Markdown相対Link CheckerとGitHub Actions Workflow |
+| 内容 | 状態 |
+|---|---|
+| Asteraの目的と役割 | 公開済み |
+| 8つの判断材料 | 公開済み |
+| Astera v8の処理構造 | 公開済み |
+| 活用例とInput・Output Sample | 公開済み |
+| 追加Optionの仕様 | 公開済み |
+| Plan・料金・Credit Catalog | 公開済み |
+| Developer ModeとAPI管理仕様 | 公開済み |
+| Appの画面構成と利用Flow | 公開済み |
+| Support、Security、Contribution情報 | 公開済み |
+
+現在のPublic Repositoryは、Asteraの仕組み、Appの設計、料金と機能、開発者向け利用方法を確認する公式案内場所です。
 
 ---
 
-## Astera Appの現在地
+## 現在準備中のもの
 
-Astera Appは、React、TypeScript、Vite、Capacitorの共通Sourceで、Web、Android、iOSへ展開する構成です。
-
-現在のSourceには、次の範囲が実装されています。
-
-- 43のRoute Pattern
-- 新しい実行画面
-- 10種類の目的選択
-- Templateと追加Optionの選択UI
-- 処理段階の表示
-- 8つの判断材料へのResult Mapping
-- Turn移動
-- Section単位とResult全体のCopy
-- Markdown Download
-- 端末共有
-- Project、History、Settings、Account、Security、Plan、Credit、Developer、Share、Legal、Status、Supportの画面経路
-- Desktop、Smartphone、Tablet向けResponsive Shell
-- Android／iOS Native Shell用の設定とWorkflow
-- API未接続・不整合時に成功表示へ置き換えないFail-Closed方針
-
-これらは**Source実装範囲**です。すべてを本番利用可能とする表記ではありません。
+| 内容 | 現在地 |
+|---|---|
+| Astera App | 画面とFrontend処理を実装中。Production公開前 |
+| 高精度翻訳 | 仕様確定。Provider接続と品質検証前 |
+| エージェントモード | Low・Medium・Highの仕様確定。実行環境検証前 |
+| 書類作成 | Templateと書式保持仕様確定。外部連携検証前 |
+| 外部Storage転送 | 一方向転送仕様確定。OAuthと転送検証前 |
+| Private Mode | 保存しない処理方針と暗号化仕様確定。実環境検証前 |
+| Astera Storage | 容量と月次Creditを確定。保存Backend検証前 |
+| Account・Security | 画面とFlowを準備中。認証Provider実運用前 |
+| Plan・Credit・決済 | Catalogを確定。契約・購入・Ledger実運用前 |
+| Developer Mode | 画面とKey管理仕様を準備中。実Key発行・Endpoint公開前 |
+| Android・iOS | 共通App構成を準備中。Store公開前 |
 
 ---
 
-## 現在の公開実績に含めないもの
+## 現在利用できないもの
 
-次の項目は、接続・実環境・実機での確認が完了するまで、現在利用可能な機能として扱いません。
+現時点では、次を利用可能とは案内していません。
 
-- Cloudflare上のProduction表示
-- Backend EndpointとResponse Schemaの実接続
+- Astera AppのProduction版
+- Account登録・Loginの本番運用
+- Plan契約とCredit購入
+- Square決済
 - File本体のUploadと内容解析
 - Project、History、ShareのServer保存
-- Account登録、Login、Passkey、二段階認証の実運用
-- Plan、Credit、Checkout、Billingの決済連携
-- 外部Storage接続
-- Developer APIの提供
-- Android APK／AABの実Buildと実機確認
-- iOS／iPadOSのSimulator・実機確認
-- Google Play／App Store公開
+- 外部Storageへの実転送
+- Developer APIの実EndpointとAPI Key
+- Android／iOS Store版
 
-画面やRouteがSourceに存在していても、外部ServiceやBackendを含む動作確認が終わるまでは、利用可能とは表記しません。
+準備中の機能について、画面や仕様が存在することだけを理由に「現在使える」とは表示しません。
 
 ---
 
-## File機能の現在地
+## 公開中のOption
 
-現在のFrontend Sourceでは、選択したFileの名称、Size、TypeなどのMetadataを実行Payloadへ含める構造があります。
+現在の正式なOption構成は次の4種類です。
 
-File本体をUploadし、内容を読み取って判断材料へ反映する動作は、現在の公開実績には含めません。
+1. 高精度翻訳
+2. エージェントモード
+3. 書類作成
+4. 外部Storage転送
 
-そのため、Public Documentation上でも「Fileを追加できる画面があること」と「File内容を解析できること」を分けて説明します。
-
----
-
-## このPublic Repositoryの位置付け
-
-現在のPublic Repositoryは、次の目的で公開しています。
-
-- Asteraが何を解決する仕組みかを伝える
-- Astera v8とAstera Appの役割を説明する
-- 8つの判断材料と具体例を確認できるようにする
-- 現在のSource実装範囲と実稼働確認範囲を混同させない
-- 開発の進行に合わせて、公開できる事実を更新する
-
-現在のRepositoryは、Astera AppのInstall Packageや全Sourceを配布するReleaseではありません。
+Private Mode、暗号化、Astera Storage、Developer Modeは独立機能です。詳細は[追加Option](options.md)をご覧ください。
 
 ---
 
-## 公開判定
+## 公開中のPlan Catalog
 
-| 判定対象 | 判定 |
-|---|---|
-| Asteraの構想・仕組み・判断材料の公開 | GO |
-| Public DocumentationとSampleの公開 | GO |
-| 現在のApp Source実装範囲の紹介 | GO |
-| Astera Appを本番利用可能な完成Productとして案内 | NO-GO |
-| Account・決済・Native App等を利用可能機能として案内 | NO-GO |
+| Plan | 税込月額 | 月次Credit |
+|---|---:|---:|
+| Free | 0円 | 初回20,000／以後10,000 |
+| Basic | 980円 | 180,000 |
+| Pro | 2,980円 | 640,000 |
+| Business | 9,980円 | 2,200,000 |
+| Enterprise | 29,800円 | 6,600,000 |
 
-新しい接続検証や実機確認が完了した場合は、このページを先に更新してから各Documentへ反映します。
+これは現在確定しているCatalogです。契約・購入はAppの料金Pageと決済接続が公開された後に開始します。
+
+追加CreditやStorageを含む詳細は[Plan・料金・Credit](plans-and-credits.md)をご覧ください。
+
+---
+
+## Developer Mode
+
+Developer ModeはPro以上を対象とし、判断材料生成、根拠検索、判定、Astera統合などのAPIを管理する設計です。
+
+現在はAPIの目的、Key管理、Credit停止・再開、Sandbox Explorer等の仕様を公開しています。実EndpointとKey発行はまだ提供していません。
+
+詳細は[Developer Mode](developer-mode.md)をご覧ください。
+
+---
+
+## このRepositoryからInstallできるか
+
+現在のPublic Repositoryは、Astera AppのInstall Packageや全Sourceを配布するReleaseではありません。
+
+公開しているのは次です。
+
+- 製品の目的と仕組み
+- 利用Flowと画面説明
+- Option、Plan、料金、Credit
+- Developer Mode
+- 公開Sample
+- SupportとSecurity情報
+
+---
+
+## 更新方針
+
+新しい機能の接続確認、実環境検証、公開が完了した場合は、このページを更新してから各Guideへ反映します。
 
 ---
 
 ## 関連Document
 
 - [Repository README](../README.md)
-- [Astera Documentation](README.md)
-- [Astera AppとAstera v8](app-and-runtime.md)
+- [追加Option](options.md)
+- [Plan・料金・Credit](plans-and-credits.md)
+- [Developer Mode](developer-mode.md)
 - [Astera App Guide](app-guide.md)
 - [公開Sample](../examples/README.md)
 - [Changelog](../CHANGELOG.md)
