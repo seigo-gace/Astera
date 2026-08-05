@@ -1,192 +1,185 @@
 # Astera App Guide
 
-このDocumentは、Astera Appの**現在のSource実装範囲**を説明します。
+Astera Appは、相談や計画を入力し、8つの判断材料を確認・保存・再利用するためのApplicationです。
 
-操作画面やRouteがSourceへ存在することと、Backend・認証・決済・Storage・Production環境を含めて実際に利用できることは同じではありません。
-
-最新の公開判定は[現在の公開状態](current-status.md)を正本とします。
+このGuideでは、利用者が画面で何を選び、結果をどう読むかを説明します。現在利用できる範囲は[現在の公開状態](current-status.md)をご覧ください。
 
 ---
 
-## 状態の読み方
-
-| 表記 | 意味 |
-|---|---|
-| 公開済み | Public Repositoryで内容を確認できる |
-| Source実装済み | Frontend Source、Route、画面、処理が存在する |
-| 接続確認前 | Backendや外部Serviceを含む実動作をまだ公開実績に含めない |
-| 実機確認前 | Smartphone、Tablet、Android、iOS等の実端末確認を公開実績に含めない |
-
----
-
-## 1. App全体の現在地
-
-Astera Appは、React、TypeScript、Vite、Capacitorの共通Sourceを、Web、Android、iOSへ展開する構成です。
-
-現在のSourceには、43のRoute Patternと、次の画面領域が含まれています。
+## App全体
 
 ```text
 Astera App
-├─ 新しい実行・Result
-├─ Project・History・Turn
+├─ 新しい実行
+├─ Result・Turn
+├─ Project・History
 ├─ Settings
 ├─ Account・Security
-├─ Plan・Credit・Billing
+├─ Plan・Credit
 ├─ Developer Mode
-├─ Public／Private Share
-├─ Legal・Status・Support
-└─ Web・Smartphone・Tablet・Native Shell
+└─ Share・Support
 ```
 
-現在公開できる事実は、これらの**画面経路とFrontend処理がSourceへ実装されていること**です。
-
-Account、決済、Storage、Share、Developer API等が本番で利用可能であるとは、まだ表記しません。
+PCではSidebar、SmartphoneではHeaderとDrawer、Tabletでは画面幅に応じた配置を使います。
 
 ---
 
-## 2. 新しい実行画面
+## 1. 新しい実行
 
-新しい実行画面は、Asteraへ渡す内容と処理条件を設定するFrontendです。
+新しい実行では、次を一つの画面で設定します。
 
-現在のSourceでは、次を扱います。
-
-- Text入力
-- 目的選択
-- File選択UI
-- Project情報の選択UI
+- 整理したい内容
+- 目的
+- Option
 - Template
-- 追加Option
-- 実行開始
-- 処理段階表示
-- 停止操作
-- Result表示
-- Turn移動
+- File
+- Private Mode
+- 保存・転送先
+- 予定Credit
 
-実際のResult生成はBackend EndpointとResponse Schemaに依存します。Production接続を含む動作確認が終わるまで、Frontend画面の存在だけで「実行可能」とは表記しません。
+### 入力するとよい内容
 
----
-
-## 3. 入力
-
-入力欄には、質問だけでなく次の内容を入れる構成です。
-
-- 迷っていること
-- 複数案の比較
-- 企画・計画
-- 資料の確認目的
-- AIが作った回答
-- 障害や失敗の状況
-- 契約や提案の確認事項
-- 改善したい文章や設計
-- 調査前に整理したい論点
-
-判断材料を具体的にするため、次の情報を一緒に入れることを想定しています。
-
-- 最終的な目的
-- 背景
-- 期限
-- 予算・人数・時間等の制約
-- 現在の候補
+- 最終的に決めたいこと
+- 背景と期限
+- 予算、人数、時間などの制約
+- 比較中の候補
 - 確認済みの事実
-- 未確認の推測
+- まだ確認できていない推測
 - 避けたい失敗
 
+入力例：
+
+```text
+予約Systemを変更するか迷っています。
+候補はA、B、Cです。
+スタッフ5人が毎日使います。
+価格だけでなく、操作性、移行の手間、Support、障害時の戻しやすさを比較してください。
+```
+
 ---
 
-## 4. 目的選択
+## 2. 目的を選ぶ
 
-現在のFrontend Sourceには、次の10種類の目的が定義されています。
-
-| 目的 | 想定する使い方 |
+| 目的 | 使う場面 |
 |---|---|
-| 自動 | 入力内容から見る方向を選ぶ |
-| Review | 資料・計画・提案の抜けを確認する |
-| 比較 | 複数案を同じ条件で比べる |
-| 検証 | 説明・根拠・結論が成立するか確認する |
-| 改善 | 現在案の弱点と改善方向を整理する |
-| 調査 | 調べるべき項目と情報源を整理する |
-| 計画 | 順序、依存関係、停止条件を整理する |
-| 検討 | 方向を決める前に複数視点を出す |
-| 判断 | 最終選択に必要な成立条件を整理する |
-| 原因 | 問題の原因候補と確認順を整理する |
+| 自動 | 内容に合う確認方法を選びたい |
+| Review | 資料や計画の抜けを確認したい |
+| 比較 | 複数案を同じ条件で比べたい |
+| 検証 | 根拠や結論が成立するか確認したい |
+| 改善 | 現在案をより良くしたい |
+| 調査 | 調べる項目を先に整理したい |
+| 計画 | 順序、依存関係、停止条件を整理したい |
+| 検討 | 方向を決める前に広く考えたい |
+| 判断 | 最終選択と成立条件を整理したい |
+| 原因 | 原因候補と確認順を整理したい |
 
-目的選択UIがSourceへ存在することは確認済みです。目的ごとのBackend処理結果は、実接続確認後に利用可能範囲へ加えます。
+目的は、今回一番重視したいものを選びます。
 
 ---
 
-## 5. Templateと追加Option
+## 3. 追加Option
 
-現在のSourceには、次のTemplateが定義されています。
+現在の正式なOptionは4種類です。
+
+| Option | 内容 |
+|---|---|
+| 高精度翻訳 | 文書構造と情報量を維持して翻訳だけを行う |
+| エージェントモード | Low・Medium・Highの複数Stepで作業を進める |
+| 書類作成 | 公式・個別Templateへ内容を反映する |
+| 外部Storage転送 | 完成した結果を利用者のStorageへ一方向転送する |
+
+SettingsのToggleは、Composerに候補を表示するかを管理します。ToggleをONにしただけで実行・課金されることはありません。
+
+Private Mode、暗号化、Astera Storage、Developer Modeは独立機能です。
+
+詳しくは[追加Option](options.md)をご覧ください。
+
+---
+
+## 4. Template
+
+Templateは、繰り返し使う確認方法や書式を選ぶ機能です。
+
+### 判断用Template
 
 - Review
 - 比較
 - 計画
 - Risk確認
 
-追加Optionとして、次の選択UIがあります。
+### 書類Template
 
-- 高精度翻訳
-- 文書生成
-- 高度な書き換え
+- Astera公式Template
+- 利用者が登録する個別Template
 
-これらはFrontend上の選択肢です。各Optionの外部処理・課金・完成Outputまでを現在利用可能とは表記しません。
-
----
-
-## 6. File機能
-
-File選択UIとFile Metadataを扱うSourceは存在します。
-
-現在Payloadへ含める構造があるのは、主に次の情報です。
-
-- File名
-- Size
-- Type
-
-**File本体をUploadし、内容を読み取って判断材料へ反映する動作は、現在の公開実績に含めません。**
-
-そのため、現在公開できる説明は「Fileを選択し、関連FileのMetadataを実行条件へ含める画面がある」までです。
-
-企画書、見積書、契約書、Log等を実際に解析できるという表記は、Upload・Storage・解析Backendの確認後に追加します。
+書類作成では、Googleスプレッドシートの指定CellやNamed Rangeだけを更新し、数式やLayoutを維持する設計です。
 
 ---
 
-## 7. 実行Payloadと安全停止
+## 5. File
 
-現在のFrontend Sourceでは、入力内容を次のような情報へまとめてAPIへ渡す構成です。
+File Pickerでは、実行に関係するFileを選びます。
 
-- Input
-- Purpose
-- Additional Option
-- File Metadata
+入力欄には、Fileを選ぶだけでなく、確認目的も書きます。
+
+```text
+添付した3社の見積書について、初期費用、月額、解約条件、追加料金を同じ表で比較してください。
+```
+
+現在の公開範囲ではFile選択画面とMetadata処理を説明しています。File本体のUpload・内容解析が利用可能になる時期は[現在の公開状態](current-status.md)で案内します。
+
+---
+
+## 6. Private Mode
+
+Private Modeは、通常の履歴やAstera Storageへ本文・File・結果を残さず処理するための独立Modeです。
+
+- Basic以上
+- Composerを開いたとき既定ON
+- 追加Creditなし
+- 通常Modeへ勝手に切り替えない
+- 結果は端末Downloadまたは外部Storage転送で受け取る
+- Private Modeの本文はShareできない
+
+Private Modeは追加Optionではなく、Dataの扱いを決める設定です。
+
+---
+
+## 7. 実行前確認
+
+実行前に次を確認します。
+
+- 入力内容
+- 選択した目的
+- OptionとMode
 - Template
+- File
+- Private Mode
+- 保存・転送先
+- 予定Credit
 
-API Baseがない、Endpointが応答しない、Response Schemaが合わない等の場合に、Mockの成功結果へ置き換えないFail-Closed方針です。
-
-つまり、接続できていない状態を「成功したように見せる」ことは、現在のSource方針に含めません。
+Creditが足りない場合は処理を開始せず、不足量と変更できる項目を表示します。
 
 ---
 
-## 8. 処理段階表示
+## 8. 処理中
 
-Frontendには、処理中の状態を段階表示する構造があります。
-
-想定される表示は次の流れです。
+処理中は利用者向けに段階を表示します。
 
 1. 判断材料を読み込む
 2. 情報を確認する
 3. 条件を照合する
 4. 複数案を比較する
 5. Resultを構造化する
-6. 8つの項目へ割り当てる
+6. 8つの項目へ整理する
 
-この表示はFrontend Source実装範囲です。各段階でBackendが実際に行う処理との一致は、接続検証後に公開判定します。
+停止操作を選んだ場合は、新しい処理を続けません。
 
 ---
 
-## 9. 8つの判断材料
+## 9. Result
 
-Responseを次の8項目へ割り当てるFrontend Mappingがあります。
+Resultは次の8項目で表示します。
 
 1. 本当の目的
 2. 前提不足
@@ -197,199 +190,117 @@ Responseを次の8項目へ割り当てるFrontend Mappingがあります。
 7. 推奨判断
 8. 主役AIへの再指示
 
-Resultは一枚の長文ではなく、項目ごとに確認する構成です。
+最初は、**前提不足・危機察知・推奨判断**の3項目を見ると全体をつかみやすくなります。
 
-Astera v8の処理内容は[Asteraの仕組み](how-it-works.md)をご覧ください。
+その後、事実確認と比較案を読み、推奨が成立する理由を確認します。
 
 ---
 
-## 10. TurnとResult再利用
+## 10. Turn
 
-現在のFrontend Sourceには、次の操作があります。
+一つの作業内で行った各実行をTurnとして扱います。
 
-- Turn Rail
-- Turn間の移動
-- Turn名の変更
-- Turn削除
-- Section単位のCopy
-- Result全体のCopy
+```text
+Turn 1：最初の相談
+Turn 2：不足情報を追加
+Turn 3：比較条件を変更
+Turn 4：Riskを優先して再評価
+```
+
+Turn間を移動し、名称変更や削除を行う構成です。
+
+---
+
+## 11. Resultの再利用
+
+- Section単位でCopy
+- Result全体をCopy
 - Markdown Download
-- 端末共有
+- 端末の共有機能へ渡す
+- Projectへまとめる
+- Historyから探す
+- Shareを作成する
+- 主役AIへ渡す
 
-CopyとMarkdown生成はFrontendで扱う範囲です。
-
-Project保存、History保存、Server側Result ID、Share URLの発行等はBackend接続を含むため、現在の公開実績には含めません。
-
----
-
-## 11. ProjectとHistory
-
-ProjectとHistoryのRoute・画面経路はSourceへ実装されています。
-
-設計上の役割は次のとおりです。
-
-- **Project**：同じ目的の実行、資料、Result、判断変更をまとめる
-- **History**：過去の実行を日時や条件から探す
-
-ただし、実Dataの保存、取得、検索、同期はBackend EndpointとDatabaseに依存します。
-
-そのため、現在は「Project・History画面のSource実装」を公開範囲とし、「実Dataを保存・再取得できること」は接続確認後の判定対象です。
+Project、History、ShareのServer保存は準備中です。提供状態は[現在の公開状態](current-status.md)をご覧ください。
 
 ---
 
-## 12. Settings
+## 12. ProjectとHistory
 
-Source上には、次のSettings Routeがあります。
+### Project
 
-- Option
-- 表示・言語
-- Template
+同じ目的に関係する実行、File、Result、判断変更をまとめます。
+
+### History
+
+過去の実行を日時、目的、Projectなどから探します。
+
+古いResultを使う場合は、価格、期限、法律、人数、仕様などが変わっていないか確認します。
+
+---
+
+## 13. Settings
+
+Settingsでは次を管理します。
+
+- Optionの表示
+- 表示言語とTheme
+- 個別Template
 - 外部Storage接続
 - Astera Storage
 - Data・Privacy
 - 通知・Credit警告
 
-Theme、表示言語、全画面入力、Reduced Motion等のFrontend設定を扱う構造があります。
-
-外部Storage、契約Storage容量、通知配信、Credit警告等は外部接続を含むため、現在利用可能とは表記しません。
+Option表示をOFFにしても、契約や過去の実行を変更しません。
 
 ---
 
-## 13. Account・Security
+## 14. Plan・Credit
 
-Source上には次のRoute・画面経路があります。
+Plan画面では、現在Plan、月次Credit、利用可能な機能、Storage上限などを確認する構成です。
 
-- Login
-- Account登録
-- Email確認
-- Password再設定
-- Astera用Password設定
-- 二段階認証Challenge
-- Account概要
-- Account Security
+Credit画面では、残高、予約中Credit、概算残り実行回数、Pack、自由購入、使用履歴、返却・補填、Developer APIの停止状態を確認します。
 
-Security画面の設計には、Password、Passkey、二段階認証、Backup Code、接続Account、Session等が含まれます。
-
-現在公開できるのは、Route・画面・API境界のSource実装です。
-
-認証Provider、Session、Email送信、Passkey登録、二段階認証の本番動作は、実接続確認が終わるまで利用可能機能として扱いません。
-
----
-
-## 14. Plan・Credit・Billing
-
-Source上には次のRoute・画面経路があります。
-
-- 料金・Plan
-- Plan・Subscription
-- Credit
-- Checkout
-- Billing Status
-
-設計上は、Plan、Credit残高、購入、利用履歴、決済状態等を扱います。
-
-Square等の外部決済、Credit Ledger、反映処理、返金・補填、停止・復帰処理は実接続確認前です。
-
-現在は、これらの画面構成とFrontend境界を公開し、購入可能・決済可能とは表記しません。
+詳しい金額と計算方法は[Plan・料金・Credit](plans-and-credits.md)をご覧ください。
 
 ---
 
 ## 15. Developer Mode
 
-Developer ModeのRouteと管理画面構成はSourceへ実装されています。
+Pro以上の利用者向けに、API Key、Scope、Sandbox／Production、Usage、Credit、Rate、Quota、停止理由を管理します。
 
-設計上の管理対象は次のとおりです。
-
-- API利用状態
-- API Key
-- 使用量
-- Credit
-- 接続先
-- Error・停止理由
-- API Terms
-
-Developer APIのEndpoint、Key発行、権限、使用量計測、課金を含む実運用は、現在の公開実績には含めません。
+Developer Modeの機能と現在の提供状態は[Developer Mode](developer-mode.md)にまとめています。
 
 ---
 
-## 16. Share
+## 16. Account・Security
 
-Public Share、Private Share、Share管理のRouteはSourceへ実装されています。
+Account画面では、Profile、Plan、Credit、Security状態を確認します。
 
-設計上は、公開URL、限定共有、期限、停止等を扱います。
+Security画面では、Password、Passkey、二段階認証、Backup Code、接続Account、Sessionを管理する設計です。
 
-実際のShare発行、認可、保存、停止、期限処理はBackend接続を含むため、現在利用可能とは表記しません。
+本番認証の提供状態は[現在の公開状態](current-status.md)で案内します。
 
 ---
 
-## 17. Web・Smartphone・Tablet
+## 17. Smartphone・Tablet
 
-共通Frontend Sourceには次のResponsive対応が含まれます。
-
-- Desktop Sidebar
-- Smartphone Header・Drawer
-- Tablet幅への対応
-- OrientationとWindow Resize
-- Visual Viewport
-- Safe Area
-- Touch Target
-- Software Keyboard対策
-- Reduced Motion
-- Light／Dark
-- Hoverなし端末への対応
-- Horizontal Overflow防止
-
-これらはSource実装範囲です。
-
-実Smartphone Browser、実Tablet、Foldable、Android実機、iPhone／iPad実機での確認は、現在の公開実績に含めません。
+- Smartphone：HeaderとDrawer、画面幅いっぱいの入力・Result
+- Tablet：縦横表示、画面分割、Window Resize
+- Touch端末：押しやすいButton、Hoverなしで必須操作を表示
+- Keyboard表示中：入力欄と実行Buttonを隠さない
+- PC：Enterは改行、Ctrl／Command＋Enterで実行する設計
 
 詳細は[Mobile・Tablet・Accessibility](mobile-and-accessibility.md)をご覧ください。
 
 ---
 
-## 18. Android・iOS
-
-Capacitorを利用したAndroid／iOS Native Shell用の設定とWorkflowがあります。
-
-現在の公開実績には、次を含めません。
-
-- Android APK／AABの実Build成功
-- Android実機動作
-- iOS Simulator Build成功
-- iPhone／iPad実機動作
-- TestFlight
-- Google Play公開
-- App Store公開
-
-Native Appを公開済みとは表記しません。
-
----
-
-## 現在公開できるApp情報のまとめ
-
-| 項目 | 公開上の扱い |
-|---|---|
-| Appの目的・画面構成 | 公開可能 |
-| 43 Route Pattern | Source実装として公開可能 |
-| 入力・目的・Template・Option UI | Source実装として公開可能 |
-| Result Mapping・Turn・Copy・Markdown | Source実装として公開可能 |
-| Responsive・Native Shell設定 | Source実装として公開可能 |
-| Backendを含む実行 | 確認前 |
-| File内容解析 | 確認前 |
-| Project・History・Shareの実保存 | 確認前 |
-| Account・認証・Securityの実運用 | 確認前 |
-| Plan・Credit・決済 | 確認前 |
-| Developer API | 確認前 |
-| Android・iOS実機／Store | 確認前 |
-
----
-
 ## 関連Document
 
+- [操作Flow](getting-started.md)
+- [追加Option](options.md)
+- [Plan・料金・Credit](plans-and-credits.md)
+- [Developer Mode](developer-mode.md)
+- [画面案内](app-screen-map.md)
 - [現在の公開状態](current-status.md)
-- [App画面一覧](app-screen-map.md)
-- [Astera AppとAstera v8](app-and-runtime.md)
-- [Asteraの仕組み](how-it-works.md)
-- [Workspace・結果管理](workspace-and-results.md)
-- [Account・Security・Plan・Credit](account-security-and-billing.md)
-- [Mobile・Tablet・Accessibility](mobile-and-accessibility.md)
