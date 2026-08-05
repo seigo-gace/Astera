@@ -1,101 +1,111 @@
 # Astera Documentation
 
-AsteraのDocumentationは、初めて知る人、現在の公開範囲を確認する人、Astera AppのSource実装を理解したい人、判断の仕組みを確認したい人が、目的に合う順番で読めるように分かれています。
+Asteraの説明を、利用者が知りたい内容から探せるようにまとめています。
 
-最初に[現在の公開状態](current-status.md)を確認してください。
+## 最初に読む
 
-このDocumentationでは、次を区別しています。
-
-- **公開済み**：現在このRepositoryで外部へ示せる内容
-- **Source実装済み**：画面・Route・Frontend処理がSourceに存在する状態
-- **実稼働未確認**：Backend、認証、決済、Storage、Production、実機を含む確認前の状態
-
-画面やRouteが存在するだけの機能を、現在利用可能とは表記しません。
+1. [Repository README](../README.md) — Astera全体を短時間で理解する
+2. [公開Sample](../examples/README.md) — 実際の入力と8つの判断材料を見る
+3. [現在の公開状態](current-status.md) — 現在利用できる範囲と準備中の範囲を確認する
 
 ---
 
-## 初めてAsteraを知った人
+## 機能から探す
 
-次の順番で読むと、Astera全体と現在地をつかめます。
-
-1. [Repository README](../README.md)
-2. [現在の公開状態](current-status.md)
-3. [Astera AppとAstera v8](app-and-runtime.md)
-4. [Asteraの仕組み](how-it-works.md)
-5. [公開Sample](../examples/README.md)
-
----
-
-## 現在のApp Source実装を確認する人
-
-| Document | 分かること |
+| 知りたいこと | Document |
 |---|---|
-| [Astera App Guide](app-guide.md) | 入力、目的、Result、Turn、Project、Settings、Account等のSource実装と接続状態 |
-| [App画面一覧](app-screen-map.md) | 43 Route Pattern、各画面の役割、Source実装と実稼働の区別 |
-| [操作Flow](getting-started.md) | 現在のSourceに沿った入力からResult再利用までの流れ |
-| [Workspace・結果管理](workspace-and-results.md) | Project、History、Turn、Result、Shareの設計と現在地 |
-| [Account・Security・Plan・Credit](account-security-and-billing.md) | Account関連Route・画面構成と外部接続の確認状態 |
-| [Mobile・Tablet・Accessibility](mobile-and-accessibility.md) | Responsive Source対応と実端末確認状態 |
-| [FAQ](faq.md) | 現在利用可能な範囲と、設計・実装中の範囲 |
+| Optionの違いと選び方 | [追加Option](options.md) |
+| Plan、月額、月次Credit、追加Credit | [Plan・料金・Credit](plans-and-credits.md) |
+| API Key、Usage、Sandbox、Credit停止 | [Developer Mode](developer-mode.md) |
+| App全体の使い方 | [Astera App Guide](app-guide.md) |
+| 入力からResultまでの流れ | [操作Flow](getting-started.md) |
+| 各画面を探す | [画面案内](app-screen-map.md) |
+| Project、History、Turn、Share | [Workspace・結果管理](workspace-and-results.md) |
+| AccountとSecurity | [Account・Security・Plan・Credit](account-security-and-billing.md) |
+| File、Storage、主役AIとの関係 | [連携の考え方](integrations.md) |
+| Smartphone・Tabletでの考え方 | [Mobile・Tablet・Accessibility](mobile-and-accessibility.md) |
 
 ---
 
-## Asteraの判断処理を理解したい人
+## Asteraの仕組みを知る
 
-| Document | 分かること |
+| Document | 内容 |
 |---|---|
-| [Asteraの仕組み](how-it-works.md) | 入力から8つの判断材料へ整理される工程 |
+| [Asteraの仕組み](how-it-works.md) | 入力を8つの判断材料へ整理する工程 |
 | [Astera AppとAstera v8](app-and-runtime.md) | App、Runtime、主役AIの役割分担 |
-| [活用例](use-cases.md) | 日常、事業、契約、開発、AI回答Reviewでの使い方 |
-| [公開Sample](../examples/README.md) | 具体的な入力と8項目のResult |
+| [活用例](use-cases.md) | 日常、事業、開発、AI回答確認での使い方 |
+| [公開Sample](../examples/README.md) | 具体的なInput・Output |
 
 ---
 
-## 外部連携やDeveloper利用を検討する人
+## Optionを知る
 
-| Document | 分かること |
-|---|---|
-| [現在の公開状態](current-status.md) | Developer API、認証、決済、Storage等が現在の公開実績に含まれるか |
-| [連携の考え方](integrations.md) | 主役AI、File、Storage、Share、認証、決済、Developer APIの設計上の関係 |
-| [App画面一覧](app-screen-map.md) | Developer ModeやAccount画面のSource上の位置付け |
-| [Support](../SUPPORT.md) | 質問、不具合、Security以外の連絡方法 |
-| [Security Policy](../SECURITY.md) | Security問題の報告方法 |
+現在の実行Optionは4種類です。
 
----
+- 高精度翻訳
+- エージェントモード
+- 書類作成
+- 外部Storage転送
 
-## Asteraを紹介する人
+Private Mode、暗号化、Astera Storage、Developer Modeは独立機能であり、実行Optionには含めません。
 
-| Document | 分かること |
-|---|---|
-| [現在の公開状態](current-status.md) | 現在、公開実績として紹介できる範囲 |
-| [Press Kit](press-kit.md) | 正式名称、短い説明、標準紹介文、Product構成、英語説明 |
-| [活用例](use-cases.md) | 具体的に何へ使えるか |
-| [公開Sample](../examples/README.md) | 紹介に使える入出力例 |
-| [Trademark](../TRADEMARKS.md) | Astera名称・Logoの扱い |
+詳しくは[追加Option](options.md)をご覧ください。
 
 ---
 
-## Documentationを改善する人
+## PlanとCreditを知る
+
+現在のPlanはFree、Basic、Pro、Business、Enterpriseです。
+
+[Plan・料金・Credit](plans-and-credits.md)では次を確認できます。
+
+- 税込月額
+- 月次Credit
+- Planごとの主な機能
+- 未登録利用とFree
+- Credit計算式
+- 追加Credit Packと自由購入
+- Astera Storageの容量と月次Credit
+- Credit不足時の動作
+
+---
+
+## 開発者向け
+
+[Developer Mode](developer-mode.md)では次を説明しています。
+
+- 提供対象API
+- SandboxとProduction
+- API Keyの発行、Rotate、Pause、Resume、削除
+- Scope、Rate、Quota
+- UsageとCredit
+- Credit不足による停止と再開
+- Sandbox Explorer
+- 現在準備中の範囲
+
+---
+
+## 困ったとき
+
+- 一般的な疑問 → [FAQ](faq.md)
+- 問い合わせ → [Support](../SUPPORT.md)
+- Security問題 → [Security Policy](../SECURITY.md)
+- 現在の提供状態 → [現在の公開状態](current-status.md)
+
+---
+
+## 紹介・掲載
+
+- [Press Kit](press-kit.md)
+- [Trademark](../TRADEMARKS.md)
+- [公開Sample](../examples/README.md)
+
+---
+
+## Repositoryへの参加
 
 - [Contributing](../CONTRIBUTING.md)
 - [Code of Conduct](../CODE_OF_CONDUCT.md)
 - [Changelog](../CHANGELOG.md)
 
-Markdown内の相対Linkは、次のCommandで確認できます。
-
-```bash
-python3 scripts/check_docs.py
-```
-
----
-
-## 迷った場合
-
-- Asteraが何か知りたい → [README](../README.md)
-- 現在何が公開済みか知りたい → [現在の公開状態](current-status.md)
-- App Sourceの内容を確認したい → [Astera App Guide](app-guide.md)
-- 目的のRoute・画面を探したい → [App画面一覧](app-screen-map.md)
-- Resultの意味を知りたい → [Asteraの仕組み](how-it-works.md)
-- 実例を見たい → [公開Sample](../examples/README.md)
-- Account・Credit・決済の現在地を知りたい → [Account・Security・Plan・Credit](account-security-and-billing.md)
-- 問い合わせたい → [Support](../SUPPORT.md)
+Markdown内の相対LinkはRepositoryの確認Scriptで検査する構成です。
