@@ -1,81 +1,6 @@
 # よくある質問
 
-このFAQは、Asteraそのものと、現在Public Repositoryで公開できる範囲を説明します。
-
-Appの画面やRouteがSourceへ存在することと、Productionで利用できることを分けて回答します。
-
-最新の判定は[現在の公開状態](current-status.md)を確認してください。
-
----
-
-## 現在の公開状態
-
-### 今、Asteraは何を公開していますか？
-
-現在公開している主な内容は次です。
-
-- Asteraの目的と役割
-- 8つの判断材料
-- Astera v8の処理構造
-- Use Case
-- 入力・Output Sample
-- Astera AppのFrontend Source実装範囲
-- 43 Route Pattern
-- Documentation、Support、Security、Contribution情報
-
----
-
-### Astera Appは今すぐ本番利用できますか？
-
-現在のPublic Repositoryでは、本番利用可能とは案内していません。
-
-Frontend Sourceに画面、Route、入力、Result Mapping、Turn、Copy、Markdown Download、Responsive Shell等は実装されています。
-
-Backend、認証、決済、Storage、Production環境、実端末を含む確認は別の段階です。
-
----
-
-### 画面がSourceにあるなら、機能は完成しているのではありませんか？
-
-画面・RouteのSource実装と、実際に機能が成立することは別です。
-
-たとえばLogin画面があっても、Account Database、Session、Email、Provider接続等が確認されるまでは、本番Login可能とは表記しません。
-
-同じ基準をProject、History、Share、Credit、決済、Developer APIにも適用します。
-
----
-
-### 現在公開できるAppの実装は何ですか？
-
-Source上で確認できる主な範囲は次です。
-
-- 新しい実行画面
-- 10種類の目的選択
-- Templateと追加Optionの選択UI
-- File選択UIとMetadata
-- 処理段階表示
-- 8 Section Result Mapping
-- Turn Rail
-- Section／全体Copy
-- Markdown Download
-- 端末共有
-- 43 Route Pattern
-- Desktop、Smartphone、Tablet向けResponsive Shell
-- Android／iOS Native Shell用設定とWorkflow
-- API未接続時に成功表示へ置き換えないFail-Closed方針
-
----
-
-### 今後の機能まで完成したように書いていませんか？
-
-現在は、Public Documentation全体で次を区別しています。
-
-- 公開済み
-- Source実装済み
-- 接続確認前
-- 実機確認前
-
-未確認の機能を利用可能とは表記しません。
+Asteraの仕組み、Option、Plan、Credit、Developer Mode、現在の提供状態についてまとめています。
 
 ---
 
@@ -85,40 +10,16 @@ Source上で確認できる主な範囲は次です。
 
 Astera v8は生成AIそのものではありません。
 
-固定された処理順とRuleを使い、質問、相談、計画、AI回答等を8つの判断材料へ整理するRuntimeです。
-
----
+質問や計画を、目的、前提、事実、危険、反対視点、比較案などの判断材料へ整理するRuntimeです。
 
 ### ChatGPT、Claude、Geminiとの違いは何ですか？
 
-ChatGPT、Claude、Gemini等は、文章、説明、要約、提案、Codeを作ることが得意です。
-
-Asteraは、その前に必要な目的、前提、事実、危険、反対視点、比較案を整理します。
-
 ```text
-Astera ＝ 判断の骨組みを作る
-主役AI ＝ 骨組みを使って最終成果物を作る
+Astera：答えを作る前の判断材料を整理する
+主役AI：判断材料を使って文章・計画・Codeへ仕上げる
 ```
 
----
-
-### Asteraだけでも使う考え方ですか？
-
-はい。
-
-8つの判断材料を自分で読み、選択肢の比較や最終判断へ使う設計です。
-
-文章、計画、手順、Code等へ仕上げる場合は、主役AIへ渡します。
-
----
-
-### Asteraが最終決定を強制しますか？
-
-強制しません。
-
-推奨判断だけでなく、前提不足、Risk、反対視点、別案、成立条件、停止条件を一緒に示す考え方です。
-
----
+Asteraだけで判断材料を読むことも、主役AIへ渡すこともできます。
 
 ### 8つの判断材料は何ですか？
 
@@ -131,312 +32,279 @@ Astera ＝ 判断の骨組みを作る
 7. 推奨判断
 8. 主役AIへの再指示
 
-詳しくは[Asteraの仕組み](how-it-works.md)をご覧ください。
+### Asteraが最終決定をしますか？
+
+推奨判断は示しますが、最終決定を強制しません。成立条件、停止条件、別案も一緒に示し、利用者が理由を理解して決められる状態を作ります。
 
 ---
 
-### 最新情報を自動で調べますか？
+## 入力と目的
 
-Asteraは、最新確認が必要な箇所や根拠不足を判断材料として整理する考え方です。
+### どんな内容を入力できますか？
 
-実際の価格、法律、製品仕様、News等は、公式Sourceや検索機能で確認する必要があります。
-
----
-
-## Input・目的選択
-
-### どんな内容を入力する想定ですか？
-
-- 質問
-- 相談
+- 質問・相談
 - 複数案の比較
-- 計画
-- AI回答
-- 障害状況
-- 契約確認
+- 企画・計画
+- AI回答の確認
+- 契約や提案の確認事項
+- 障害状況と原因候補
 - 改善したい文章や設計
-- 調査前の論点
 
-等を想定しています。
+### 入力へ何を書けばよいですか？
 
----
+目的、背景、期限、予算、人数、候補、確認済み事実、推測、避けたい失敗を書くと具体的になります。
 
-### どのような情報を入れるとよいですか？
+### 目的選択は何種類ありますか？
 
-特に次が役立ちます。
-
-- 目的
-- 背景
-- 期限
-- 予算
-- 人数
-- 制約
-- 候補
-- 確認済みの事実
-- 未確認の推測
-- 避けたい失敗
+自動、Review、比較、検証、改善、調査、計画、検討、判断、原因の10種類です。
 
 ---
 
-### 目的選択はいくつありますか？
+## Option
 
-現在のFrontend Sourceには次の10種類があります。
+### 現在のOptionは何ですか？
 
-- 自動
-- Review
-- 比較
-- 検証
-- 改善
-- 調査
-- 計画
-- 検討
-- 判断
-- 原因
+現在の正式な実行Optionは次の4種類です。
 
-目的選択UIはSource実装済みです。
+- 高精度翻訳
+- エージェントモード
+- 書類作成
+- 外部Storage転送
 
-目的ごとのBackend Resultは接続確認前です。
+以前の`文書生成`や`高度な書き換え`は現在のOption構成ではありません。
+
+### SettingsでOptionをONにすると課金されますか？
+
+いいえ。SettingsのToggleはComposerへ候補を表示するかを管理するだけです。
+
+実行前にOptionを選択し、予定Creditを確認して実行した場合だけ処理対象になります。
+
+### 高精度翻訳は何をしますか？
+
+見出し、段落、表、Code、URL、数字、Placeholder、情報量を維持して翻訳だけを行います。
+
+要約、解説、改善、Tone変更、追記・削除は行いません。
+
+### エージェントモードとは何ですか？
+
+複数Stepで調査や確認を進めるOptionです。
+
+- Low：最大3 Step、読取中心
+- Medium：最大8 Step、外部書込前に承認
+- High：最大15 Step、危険性のある操作ごとに承認
+
+### 書類作成とは何ですか？
+
+Astera公式Templateまたは個別Templateへ内容を反映します。
+
+Googleスプレッドシートでは、指定されたCellやNamed Rangeだけを更新し、数式、Layout、Chart、保護範囲を維持します。
+
+### 外部Storage転送とは何ですか？
+
+完成した結果を利用者管理のStorageへ一方向にCopyします。転送後、Asteraは継続同期・編集・削除しません。
+
+### Private ModeはOptionですか？
+
+いいえ。Private ModeはDataの保存方法を決める独立Modeです。
+
+Basic以上、追加Creditなしで、本文・File・結果を通常のHistoryやAstera Storageへ残さない設計です。
+
+詳しくは[追加Option](options.md)をご覧ください。
 
 ---
 
-### Templateは何ですか？
+## Planと料金
 
-現在のSourceには、Review、比較、計画、Risk確認のTemplateがあります。
+### Planと月額はいくらですか？
 
-繰り返し使う確認観点を入力条件へ加えるためのUIです。
+| Plan | 税込月額 | 月次Credit |
+|---|---:|---:|
+| Free | 0円 | 初回20,000／以後10,000 |
+| Basic | 980円 | 180,000 |
+| Pro | 2,980円 | 640,000 |
+| Business | 9,980円 | 2,200,000 |
+| Enterprise | 29,800円 | 6,600,000 |
+
+### 未登録でも使えますか？
+
+未登録では合計7,500 Credit、最大5回、1回最大1,500 Creditの試用範囲を設ける設計です。
+
+未登録分はAccount作成後の残高へ合算しません。
+
+### Basicで何が増えますか？
+
+高精度翻訳、外部Storage転送、Private Mode、Astera Storageが主な追加範囲です。Storageは最大10GBです。
+
+### Proで何が増えますか？
+
+書類Template、Developer Mode・APIが主な追加範囲です。Storageは最大100GBです。
+
+### BusinessとEnterpriseの違いは何ですか？
+
+月次CreditとStorage上限が増えます。
+
+- Business：2,200,000 Credit、最大500GB
+- Enterprise：6,600,000 Credit、最大1TB
+
+### Agent ModeはどのPlanで使えますか？
+
+利用条件は公開時点のActive Catalogへ表示します。現在のDocumentでは、確定していないPlan境界を推測して固定しません。
+
+詳しくは[Plan・料金・Credit](plans-and-credits.md)をご覧ください。
 
 ---
 
-### 翻訳や文書生成Optionは使えますか？
+## Credit
 
-高精度翻訳、文書生成、高度な書き換えの選択UIはSourceにあります。
+### Creditとは何ですか？
 
-各Optionの外部処理、品質、課金を含む実動作は、現在の公開実績には含めません。
+Asteraの実行、Option、Developer API、Astera Storageの利用量を管理する単位です。
+
+### Creditはどう計算しますか？
+
+- ASCII：1文字＝1 Credit
+- 日本語・CJK等：1文字＝1.5 Credit
+- 追加Option：1個ごとに入力換算量の50%を追加
+- 出力文字数：減算しない
+
+```text
+floor(入力換算文字数 × (1 + 0.5 × Option数))
+```
+
+### 追加Creditはいくらですか？
+
+| 価格 | Credit |
+|---:|---:|
+| 500円 | 75,000 |
+| 1,000円 | 155,000 |
+| 3,000円 | 480,000 |
+| 10,000円 | 1,650,000 |
+| 30,000円 | 5,000,000 |
+
+自由購入は最低15,000 Credit、1 Credit＝0.007円です。
+
+### Creditが足りないとどうなりますか？
+
+処理開始前に停止し、その実行分のCreditは消費しません。現在残高、予定Credit、不足量を表示します。
+
+### Credit購入後、元の実行は自動で始まりますか？
+
+始まりません。元の入力へ戻り、再見積り後に利用者が実行します。
+
+### Astera StorageにもCreditを使いますか？
+
+月次固定Creditを使う設計です。
+
+| 容量 | 月次Credit |
+|---:|---:|
+| 1GB | 3,000 |
+| 10GB | 15,000 |
+| 50GB | 50,000 |
+| 100GB | 90,000 |
+| 500GB | 350,000 |
+| 1TB | 650,000 |
 
 ---
 
-## File
+## Developer Mode
 
-### Fileを追加できますか？
+### Developer Modeは誰が使えますか？
 
-File選択UIとMetadataをPayloadへ含めるSourceがあります。
+Pro以上です。Pro未満では入口をLocked表示する設計です。
 
-現在扱う構造は、File名、Size、Type等です。
+### どのAPIを提供しますか？
+
+- 判断材料生成
+- 根拠検索
+- 判定
+- Astera統合
+- Webhook Gateway接続
+
+### API Keyで何を管理できますか？
+
+Key発行、名前変更、Rotate、Pause、Resume、削除、Scope、Sandbox／Production、Usage、Credit、Rate、Quota、停止理由を管理します。
+
+### Key全文は後から確認できますか？
+
+発行直後に一度だけ表示します。紛失時は再表示せずRotateします。
+
+### SandboxとProductionの違いは何ですか？
+
+Sandboxは開発・接続Test用でExplorerを使えます。Productionは実運用用で、Browser Explorerからの実行を禁止する設計です。
+
+### APIでCredit不足になった場合は？
+
+RequestをAstera本体へ送る前に拒否し、そのRequestのCreditは消費しません。
+
+### Credit追加後にAPIは自動再開しますか？
+
+Auto ResumeがONならCredit不足による停止だけを解除します。OFFなら利用者が再開します。
+
+Security、Account、Plan、手動Pauseなど他の停止理由は、Credit購入では解除しません。
+
+### 停止されたRequestは自動再送されますか？
+
+されません。Client側から再送します。
+
+### Deterministic Japanese Parser MCPはDeveloper ModeのAPIですか？
+
+別Repositoryで公開する独立Projectです。未完成のDeveloper APIとして扱いません。
+
+詳しくは[Developer Mode](developer-mode.md)をご覧ください。
 
 ---
+
+## File・Storage・Share
 
 ### Fileの中身を解析できますか？
 
-現在の公開実績には含めません。
+File本体Uploadと内容解析の提供状態は[現在の公開状態](current-status.md)で案内します。現在は利用可能とは案内していません。
 
-File本体のUpload、Storage保存、内容抽出、解析、Result反映は接続確認前です。
+### Astera Storageと外部Storage転送の違いは？
 
----
+- Astera Storage：Astera Account内の保存容量
+- 外部Storage転送：利用者管理のStorageへ一方向Copy
 
-### 4GBのFileを解析できますか？
+### Private ModeのResultを保存できますか？
 
-Frontend SourceにFile Sizeを扱う設定があっても、4GBの実Upload・保存・解析が成立するとは表記しません。
+通常のHistoryやAstera Storageへは保存しません。端末Downloadまたは対応する外部Storage転送で受け取る設計です。
 
-File容量の実上限は、Backend、Storage、Network、Plan、解析処理の確認後に確定します。
+### Private ModeのResultをShareできますか？
 
----
-
-## Result・Turn
-
-### Resultはどのように表示しますか？
-
-Responseを8つの判断材料へMappingするFrontend構成があります。
-
-Backendから正しいResponseを受け取るProduction動作は確認前です。
-
----
-
-### ResultをCopyできますか？
-
-Section単位とResult全体のCopy処理はFrontend Sourceにあります。
-
----
-
-### Markdownとして保存できますか？
-
-Markdown生成・Download処理はFrontend Sourceにあります。
-
-実Browser・実端末ごとの確認は端末検証の対象です。
-
----
-
-### Turnとは何ですか？
-
-一つの作業内で行った各実行です。
-
-Turn Rail、Turn間移動、名称変更、削除のFrontend Sourceがあります。
-
-Server保存と別Sessionからの再取得は確認前です。
-
----
-
-## Project・History・Share
-
-### Project画面はありますか？
-
-Routeと画面経路はSourceにあります。
-
-Project作成、保存、更新、削除、再取得等のBackend動作は確認前です。
-
----
-
-### History画面はありますか？
-
-Routeと画面経路はSourceにあります。
-
-実Dataの保存、検索、Paging、別端末同期等は確認前です。
-
----
-
-### Public ShareやPrivate Shareは使えますか？
-
-Public Share、Private Share、Share管理のRouteはSourceにあります。
-
-Token発行、認可、期限、停止、Data非公開化等のBackend動作は確認前です。
+できない設計です。
 
 ---
 
 ## Account・Security
 
-### LoginやAccount登録はできますか？
+### GoogleやGitHubのPasswordをAsteraへ渡しますか？
 
-Login、登録、Email確認、Password再設定等のRouteと画面経路はSourceにあります。
+渡しません。ProviderのPasswordを取得・流用しません。
 
-認証Backend、Email、Session、Provider接続を含む本番動作は確認前です。
+### Passkeyと二段階認証は必須ですか？
 
----
+任意です。Account Securityから設定します。
 
-### GoogleやGitHub Loginは利用できますか？
+### Security情報をGitHub Issueへ書いてよいですか？
 
-外部Providerを本人確認の入口として使う設計とFrontend境界があります。
-
-Provider OAuth実接続は現在の公開実績に含めません。
-
-ProviderのPasswordをAsteraが取得・流用しない方針です。
+Password、Passkey、認証Code、Backup Code、API Key、Token、決済情報は書かないでください。[Security Policy](../SECURITY.md)に従ってください。
 
 ---
 
-### Passkeyは利用できますか？
+## 現在の提供状態
 
-Security画面の設計にPasskeyがあります。
+### Astera Appは今すぐ使えますか？
 
-WebAuthn、端末Authenticator、登録、Login、削除等の実動作は確認前です。
+現時点ではProduction版を利用可能とは案内していません。
 
----
+このRepositoryでは、Asteraの仕組み、画面、Option、Plan、Credit、Developer Mode、Sampleを公開しています。
 
-### 二段階認証は利用できますか？
+### Plan契約やCredit購入はできますか？
 
-二段階認証Challenge Routeと管理設計があります。
+現在はCatalog内容の公開段階です。Appの料金Pageと決済接続が公開された後に開始します。
 
-TOTP、Backup Code、Recovery等の実動作は確認前です。
+### Developer APIは利用できますか？
 
----
+現在は仕様公開段階で、実EndpointとAPI Key発行は準備中です。
 
-## Plan・Credit・決済
-
-### 料金・Plan画面はありますか？
-
-`/pricing`とPlan・Subscription画面のRouteはSourceにあります。
-
-正式Catalog、契約Data、変更・解約等の実動作は確認前です。
-
----
-
-### Creditとは何ですか？
-
-Asteraの実行、Option、Developer API等の利用量を管理する設計上の単位です。
-
-Credit画面のRoute・画面構成はありますが、Ledger、残高、購入、使用履歴等のBackend動作は確認前です。
-
----
-
-### 決済できますか？
-
-CheckoutとBilling StatusのRoute・画面構成があります。
-
-外部決済、Webhook、署名検証、Plan・Credit反映、返金等は確認前です。
-
-現在、決済可能とは案内しません。
-
----
-
-## Developer API
-
-### Developer Modeはありますか？
-
-Developer ModeのRouteと画面構成はSourceにあります。
-
----
-
-### APIを今利用できますか？
-
-現在のPublic Repositoryでは提供中とは案内していません。
-
-Endpoint、Schema、Key発行、Authentication、Rate Limit、使用量計測、課金等の確認後に正式Documentを公開します。
-
----
-
-## Mobile・Tablet・Native App
-
-### Smartphone向けSourceはありますか？
-
-Header、Drawer、Safe Area、Touch Target、Keyboard対策等のResponsive Sourceがあります。
-
-実Smartphone Browserでの確認は現在の公開実績に含めません。
-
----
-
-### Tablet向けSourceはありますか？
-
-Tablet幅、Orientation、Window Resize、Pointer等を扱うSourceがあります。
-
-実Tablet、Split View、Foldable等の確認は未完了です。
-
----
-
-### Android Appは公開されていますか？
-
-公開済みとは案内していません。
-
-Capacitor設定とWorkflowはありますが、APK／AAB実Build、実機、Google Play公開は確認前です。
-
----
-
-### iPhone・iPad Appは公開されていますか？
-
-公開済みとは案内していません。
-
-Capacitor設定とWorkflowはありますが、Simulator、実機、TestFlight、App Store公開は確認前です。
-
----
-
-## Public Repository
-
-### このRepositoryからAppをInstallできますか？
-
-現在のPublic Repositoryは、AppのInstall Packageや全Sourceを配布するReleaseではありません。
-
-Asteraの目的、処理構造、App Source実装範囲、Sample、Documentationを公開するRepositoryです。
-
----
-
-### Public Repositoryとして今公開してよい状態ですか？
-
-現在完成している範囲を公開するRepositoryとしてはGOです。
-
-ただし、Production App、Account、決済、Storage、Developer API、Native App等を利用可能機能として紹介することはNO-GOです。
-
-公開範囲の正本は[現在の公開状態](current-status.md)です。
-
----
-
-### 不具合やSecurity問題はどこへ報告しますか？
-
-一般的な質問・不具合は[Support](../SUPPORT.md)、Security問題は[Security Policy](../SECURITY.md)を確認してください。
-
-Password、Backup Code、API Key、決済情報、個人情報をPublic Issueへ書かないでください。
+最新情報は[現在の公開状態](current-status.md)をご覧ください。
