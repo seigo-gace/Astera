@@ -1,218 +1,247 @@
 # Account・Security・Plan・Credit
 
-このDocumentは、Astera App Sourceに存在するAccount、Security、Plan、Credit、Billingの**画面構成と現在の接続状態**を説明します。
+Astera Appでは、Account情報、Login方法、Security、Plan、Credit、決済状態を分けて管理します。
 
-現在、これらを本番利用可能な機能として案内しているわけではありません。
-
-最新の判定は[現在の公開状態](current-status.md)を正本とします。
+料金とCreditの具体値は[Plan・料金・Credit](plans-and-credits.md)、現在の提供状態は[現在の公開状態](current-status.md)をご覧ください。
 
 ---
 
-## 現在の状態
+## Account画面
 
-| 領域 | Source状態 | 公開上の扱い |
-|---|---|---|
-| Account関連Route | Source実装済み | 画面構成として公開可能 |
-| Login・登録画面 | Source実装済み | 認証Backend接続は未確認 |
-| Password再設定 | Route・画面あり | Email送信・Token処理は未確認 |
-| Passkey | 画面・設計あり | 登録・Login実動作は未確認 |
-| 二段階認証 | Challenge Route・設計あり | 認証App連携は未確認 |
-| Backup Code | 管理設計あり | 発行・消費・再生成は未確認 |
-| Plan・Subscription | Route・画面あり | 契約Data連携は未確認 |
-| Credit | Route・画面あり | Ledger・残高反映は未確認 |
-| Checkout・Billing | Route・画面あり | 外部決済・反映処理は未確認 |
+Account概要では次を確認する構成です。
+
+- Profile
+- Email確認状態
+- Account状態
+- Current Plan
+- 利用可能Creditと予約中Credit
+- Security設定
+- Login方法
+- Billing状態
+- Developer API利用資格
+
+問題がある場合は、実行画面で原因不明のErrorにせず、Account側で理由と必要なActionを確認します。
 
 ---
 
-## 1. Account Route
+## LoginとAccount登録
 
-現在のSourceには、次のRoute Patternがあります。
+対応するLogin方法の設計：
+
+- Email＋Password
+- Google
+- GitHub
+- Passkey
+
+GoogleやGitHubで登録した場合でも、ProviderのPasswordをAsteraが取得・流用することはありません。必要に応じてAstera専用Passwordを設定します。
+
+### 基本Flow
 
 ```text
-/login
-/register
-/verify-email
-/forgot-password
-/reset-password
-/account/password/setup
-/auth/2fa
-/account
-/account/security
-/account/subscription
-/account/credit
-/account/checkout
-/account/billing/status
+Account登録
+↓
+Email確認
+↓
+Login
+↓
+必要に応じてPassword・Passkey・2FAを設定
 ```
 
-RouteがあることはSource実装として確認できます。
-
-それぞれが実Data、Email、認証Provider、決済Providerと接続し、本番で利用できることは別の確認対象です。
+Loginが必要な画面を開いた場合は、認証後に元の画面へ戻る構成です。
 
 ---
 
-## 2. 認証境界
+## Password
 
-Frontend Sourceは、認証が必要なRouteでAccount APIを確認し、未認証時にLoginへ移動する構成です。
+- 12〜128文字
+- Password変更
+- Passwordを忘れた場合の再設定
+- 外部Login後のAstera専用Password設定
 
-設計上の方針：
-
-- Cookieを含むSession確認
-- Same Originの相対PathだけをReturn先として扱う
-- MutationでCSRF情報を送る
-- 必要な処理でIdempotency Keyを使う
-- API Base未設定時は安全停止する
-- API Errorを成功表示へ置き換えない
-
-これらはFrontend側の境界実装です。
-
-Session発行、Cookie属性、CSRF検証、Account API Response等のBackend実動作は未確認です。
+重要な操作では、一定時間以内の再認証を要求する設計です。
 
 ---
 
-## 3. EmailとPassword
+## Passkey
 
-Source上には、EmailとPasswordを使う次のFlowがあります。
+Passkeyは任意で利用します。
 
-1. Account登録
-2. Email確認
-3. Login
-4. Password再設定
-5. 必要に応じたAstera用Password設定
+- 複数端末へ登録
+- 分かりやすい名称を付ける
+- 最終利用を確認
+- 個別に削除
 
-外部Loginを使う場合でも、GoogleやGitHubのPasswordをAsteraが取得・流用しない方針です。
-
-現在公開できるのは、このFlowのRoute・画面・Frontend境界です。
-
-Email配信、確認Token、Password Hash、Reset Token、Rate Limit等を含む本番認証は、接続確認後に公開判定します。
+端末を失った場合に備え、別のLogin方法も確保します。
 
 ---
 
-## 4. Passkey・二段階認証・Backup Code
+## 二段階認証とBackup Code
 
-Security画面の設計には次が含まれます。
+二段階認証はAuthenticator Appを使う設計です。
 
-- Passkey登録・削除
-- 二段階認証設定
-- Login時の二段階認証Challenge
-- Backup Code
-- 接続Login方法
-- Session確認
+設定時にBackup Codeを発行し、安全な場所へ保存します。
 
-現在は、これらの画面構成とRouteをSource実装範囲として公開します。
+- 認証CodeやBackup Codeを他人へ送らない
+- 使用後や紛失時は再生成する
+- Public Issueへ書かない
 
-端末Authenticator、WebAuthn、TOTP、Backup Code発行・消費、Recovery Flowの実動作は、現在の公開実績には含めません。
+SMS、電話、Email OTPは初期範囲に含めません。
 
 ---
 
-## 5. Plan・Subscription
+## Sessionと接続Account
 
-Plan・Subscription画面は、設計上次を扱います。
+Security画面では次を管理します。
 
-- 現在のPlan
-- 契約期間
-- 更新状態
-- 利用範囲
-- Storage容量
-- Option
-- Developer API範囲
-- Plan変更
-- 解約状態
+- Login中の端末・Session
+- Google／GitHub等の接続方法
+- 不明なSessionの終了
+- Password、Passkey、2FAの状態
 
-現在はRoute・画面構成がSourceにあります。
-
-実際のCatalog、契約Data、変更日、解約処理、Storage反映等は、Backend・決済接続確認前です。
+接続Accountを解除する前に、別のLogin方法が残っていることを確認します。
 
 ---
 
-## 6. Credit
+## Plan・Subscription
 
-Credit画面は、設計上次を扱います。
+Plan画面では次を確認します。
+
+- Current Plan
+- 税込月額
+- 月次Credit
+- 利用可能なOptionと機能
+- Astera Storage上限
+- Developer Mode利用資格
+- 更新・変更・解約状態
+
+現在のPlan：
+
+| Plan | 税込月額 | 月次Credit |
+|---|---:|---:|
+| Free | 0円 | 初回20,000／以後10,000 |
+| Basic | 980円 | 180,000 |
+| Pro | 2,980円 | 640,000 |
+| Business | 9,980円 | 2,200,000 |
+| Enterprise | 29,800円 | 6,600,000 |
+
+Planごとの詳しい機能は[Plan・料金・Credit](plans-and-credits.md)をご覧ください。
+
+---
+
+## Credit画面
+
+Credit画面では次を確認する構成です。
+
+- 利用可能残高
+- 実行のための予約残高
+- 概算の残り実行回数
+- 固定Packと自由購入
+- 使用・購入・返却・補填の履歴
+- 低残高・不足・反映待ち等の状態
+- 通知設定
+- Credit不足で停止しているDeveloper API Key
+
+### Creditが不足した場合
+
+処理開始前に不足を判定した場合、その実行は開始せずCreditも消費しません。
+
+表示する内容：
 
 - 現在残高
-- 購入候補
-- 購入履歴
-- 使用履歴
-- 予約中Credit
-- 返金・補填
-- 低残高通知
-- 実行停止状態
+- 予定Credit
+- 正確な不足量
+- Creditを追加
+- 元の入力へ戻る
+- Optionや入力を減らす
 
-現在はRoute・画面構成をSource実装範囲として公開します。
-
-Credit Ledger、原子的な増減、重複反映防止、返金・補填、枯渇時停止、補給後復帰等の実動作は、現在の公開実績には含めません。
+購入後も元の実行を自動開始しません。再見積り後に利用者が実行します。
 
 ---
 
-## 7. Checkout・Billing Status
-
-CheckoutとBilling StatusのRouteはSourceへ実装されています。
-
-設計上のFlowは次のとおりです。
+## CheckoutとBilling Status
 
 ```text
-購入内容確認
-  ↓
+購入内容を確認
+↓
 外部決済
-  ↓
+↓
 Asteraへ戻る
-  ↓
-Billing Status確認
-  ↓
-PlanまたはCredit反映
+↓
+Billing Statusを確認
+↓
+PlanまたはCreditへ反映
 ```
 
-Billing Statusでは、完了、反映待ち、失敗、Cancel、確認必要等を分ける設計です。
+決済画面から戻っただけでは反映済みとしません。
 
-Square等の外部決済、Webhook、署名検証、Accountへの反映、重複防止、返金等は実接続確認前です。
+- 支払確認中
+- Credit／Plan反映待ち
+- 完了
+- 失敗・取消
+- 確認が必要
 
-そのため、現在は「決済画面がある」「購入できる」とは案内しません。
+を分けて表示します。
 
 ---
 
-## 8. Data・Privacy
+## 通知
 
-Data・Privacy画面のRoute・設計には、次の確認項目が含まれます。
+### 重要通知
 
-- 入力・Result・File・Historyの保存
-- 保存先
-- 保存期間
-- Share状態
-- 外部Storage
-- Data Download
-- 削除
+- Credit不足による実行停止
+- 支払い失敗
+- Security設定の変更
+- 不審なLogin
+- Account状態の変更
+- Developer APIの停止・再開
+
+### 任意通知
+
+- Credit低下予告
+- 利用状況
+- 更新案内
+- Email／Push
+
+App内の重要表示を、EmailやPushだけに依存させません。
+
+---
+
+## Data・Privacy
+
+Data・Privacy画面では次を確認します。
+
+- 何を保存するか
+- 保存先と期間
+- HistoryとShare
+- Astera Storageと外部Storage
+- Data Downloadと削除
 - Account退会時の扱い
+- Private Mode
 
-現在、保存Backendや削除処理が本番で成立しているとは表記しません。
-
-Privacy Policy、実Storage構成、保持期間、削除保証が確定・接続確認された後に、利用者向けの実運用手順へ更新します。
+Private Modeでは、通常のHistoryやAstera Storageへ本文・File・結果を保存しない設計です。
 
 ---
 
-## 9. 現在公開できる説明
+## 困ったとき
 
-現在、外部へ正しく説明できる内容は次です。
+| 状況 | 確認する場所 |
+|---|---|
+| Loginできない | Email確認、Password再設定、2FA、Backup Code |
+| Planが違う | Plan・Subscription、Billing Status |
+| Creditが反映されない | Billing Status、Credit履歴 |
+| 実行が停止した | Credit残高、予定Credit、Account状態 |
+| APIが停止した | Developer Modeの停止理由 |
+| 不審なLoginがある | Security、Session、Password、Passkey |
 
-- Account、Security、Plan、Credit、BillingのRouteと画面構成がSourceにある
-- 認証必須RouteをFail-Closedで扱うFrontend方針がある
-- Google／GitHubのProvider Passwordを取得・流用しない
-- Account、決済、Credit等を別画面で確認できる構成を設計している
-- API未接続・不整合時に成功扱いへ置き換えない
-
-現在、外部へ利用可能機能として説明しない内容は次です。
-
-- Account登録・Loginの本番稼働
-- Passkey・二段階認証の本番稼働
-- Plan契約・変更・解約
-- Credit購入・利用・返金
-- Checkout・Billing反映
-- 外部決済・Webhook
+秘密情報や決済情報はPublic Issueへ書かず、[Support](../SUPPORT.md)を利用してください。
 
 ---
 
 ## 関連Document
 
-- [現在の公開状態](current-status.md)
+- [Plan・料金・Credit](plans-and-credits.md)
+- [追加Option](options.md)
+- [Developer Mode](developer-mode.md)
 - [Astera App Guide](app-guide.md)
-- [App画面一覧](app-screen-map.md)
-- [連携の考え方](integrations.md)
 - [Security Policy](../SECURITY.md)
+- [現在の公開状態](current-status.md)
