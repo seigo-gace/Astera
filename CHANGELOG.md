@@ -2,6 +2,71 @@
 
 AsteraのPublic Repositoryへ追加・更新した公式情報を記録します。
 
+## 2026-08-05
+
+### User-facing Documentation Overhaul
+
+Public Repositoryを利用者目線で再監査し、Option、Developer Mode、Plan、料金、Creditが一か所で理解できない問題を修正しました。
+
+#### New Documents
+
+- `docs/options.md` — 現行4 Optionの内容、選び方、Credit、独立機能との違い
+- `docs/plans-and-credits.md` — Plan、税込月額、月次Credit、追加Credit、Storage、計算式
+- `docs/developer-mode.md` — API、Key管理、Sandbox、Usage、Credit停止・再開
+
+#### Current Options
+
+現在の正式な実行Optionを次の4種へ統一しました。
+
+- 高精度翻訳
+- エージェントモード
+- 書類作成
+- 外部Storage転送
+
+旧表記の`文書生成`、`高度な書き換え`をPublic Documentationから除外しました。
+
+Private Mode、暗号化、Astera Storage、Developer Modeは実行Optionではなく独立機能として分離しました。
+
+#### Plans and Credits
+
+次のCurrent Catalogを利用者向けに掲載しました。
+
+| Plan | 税込月額 | 月次Credit |
+|---|---:|---:|
+| Free | 0円 | 初回20,000／以後10,000 |
+| Basic | 980円 | 180,000 |
+| Pro | 2,980円 | 640,000 |
+| Business | 9,980円 | 2,200,000 |
+| Enterprise | 29,800円 | 6,600,000 |
+
+追加Credit Pack、自由購入、文字種とOption数によるCredit計算式、Astera Storageの月次CreditとPlan上限も追加しました。
+
+#### Developer Mode
+
+- 判断材料生成、根拠検索、判定、Astera統合、Webhook Gateway接続を説明
+- Sandbox／Production Key、Scope、Rotate、Pause、Resume、削除を説明
+- Usage、Credit、Rate、Quota、停止理由を説明
+- Credit不足時は実行前拒否・非課金とする動作を説明
+- Auto Resumeが他の停止理由を解除しないことを説明
+- Deterministic Japanese Parser MCP、Skill Runtime、Vault、TGserverとの区分を整理
+
+#### Rewritten Documents
+
+次のPageを、内部監査中心の説明から利用者向けの機能・操作・選択基準へ書き換えました。
+
+- `README.md`
+- `docs/README.md`
+- `docs/current-status.md`
+- `docs/app-guide.md`
+- `docs/getting-started.md`
+- `docs/account-security-and-billing.md`
+- `docs/integrations.md`
+- `docs/app-screen-map.md`
+- `docs/faq.md`
+- `docs/press-kit.md`
+
+提供状態の注意は`docs/current-status.md`へ集約し、各Pageで同じ内部実装・検証説明を繰り返さない構成へ変更しました。
+
 ## 2026-08-04
 
 ### Current-Scope Public Release
@@ -18,8 +83,6 @@ AsteraのPublic Repositoryへ追加・更新した公式情報を記録します
 
 ### Corrected Documents
 
-次のDocumentから、未確認機能を現在利用可能と誤解させる表現を除き、Source実装状態と実稼働状態を明確に分けました。
-
 - `README.md`
 - `docs/README.md`
 - `docs/app-guide.md`
@@ -35,67 +98,23 @@ AsteraのPublic Repositoryへ追加・更新した公式情報を記録します
 - `SUPPORT.md`
 - `SECURITY.md`
 
-### Publication Decision
-
-| 判定対象 | 判定 |
-|---|---|
-| Asteraの目的・仕組み・8つの判断材料 | GO |
-| Astera v8の処理構造・Use Case・公開Sample | GO |
-| Astera Appの現在のFrontend Source実装範囲 | GO |
-| Public Documentation・Support・Security情報 | GO |
-| Astera Appを本番利用可能な完成Productとして案内 | NO-GO |
-| Backend・認証・決済・Storage・API・Native Appを利用可能機能として案内 | NO-GO |
-
-未完成機能の完成を待つのではなく、**現在完成している事実だけを公開する**方針で統一しました。
-
 ### Astera App Documentation
 
-- READMEへAstera Appの実際のProduct構成を追加
-- 新しい実行、目的選択、File、Project情報、Template、Optionの説明を拡充
-- Result、Turn、Project、History、Copy、Download、Shareの利用フローを追加
-- Settings、表示・言語、Storage、Data・Privacy、通知の説明を追加
-- Account、Password、Passkey、二段階認証、Backup Codeの説明を追加
-- Plan、Subscription、Credit、Checkout、Billing Statusの説明を追加
-- Developer Modeと外部Application連携の説明を追加
-- Web、Smartphone、Tablet、縦横画面、画面分割、Touch、Keyboard、Accessibilityの説明を追加
-
-### New Documents
-
-- `docs/app-guide.md` — Astera App Guide
-- `docs/app-screen-map.md` — Astera Appの画面とRoute一覧
-- `docs/workspace-and-results.md` — Project、History、Turn、Result、Share
-- `docs/account-security-and-billing.md` — Account、Security、Plan、Credit、Billing
-- `docs/mobile-and-accessibility.md` — Mobile、Tablet、画面向き、操作性
-- `docs/integrations.md` — 主役AI、File、Storage、Share、認証、決済、Developer API
-- `docs/README.md` — 利用目的別のDocumentation案内
-
-### Expanded Documents
-
-- `docs/getting-started.md`
-- `docs/app-and-runtime.md`
-- `docs/how-it-works.md`
-- `docs/use-cases.md`
-- `docs/faq.md`
-- `docs/press-kit.md`
-- `SUPPORT.md`
-- `SECURITY.md`
-- `CONTRIBUTING.md`
+- READMEへAstera AppのProduct構成を追加
+- 新しい実行、目的選択、File、Project情報、Template、Optionを説明
+- Result、Turn、Project、History、Copy、Download、Shareを説明
+- Settings、表示・言語、Storage、Data・Privacy、通知を説明
+- Account、Password、Passkey、二段階認証、Backup Codeを説明
+- Plan、Subscription、Credit、Checkout、Billing Statusを説明
+- Developer Modeと外部Application連携を説明
+- Web、Smartphone、Tablet、縦横画面、画面分割、Touch、Keyboard、Accessibilityを説明
 
 ### Public Examples
-
-次の入力例と8つの判断材料を追加しました。
 
 - 予約System変更の比較
 - AIによる全面移行提案の検証
 - 退職・独立判断
-
-既存の新Service公開例と合わせ、日常、事業、開発、AI回答ReviewでAsteraがどう使われるかを比較できる構成にしました。
-
-### Repository Maintenance
-
-- 古い簡易連携Pageを削除し、詳細な`docs/integrations.md`へ統合
-- Documentationの読み順と目的別Navigationを追加
-- Local Markdown Link CheckerとGitHub Actionsによる確認を維持
+- 新Service公開判断
 
 ## 2026-08-03
 
